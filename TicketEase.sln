@@ -5,6 +5,14 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketEase", "TicketEase\TicketEase.csproj", "{94878B47-5080-4834-BAD9-21F8B69E480D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketEase.Persistence", "TicketEase.Persistence\TicketEase.Persistence.csproj", "{B62803C7-C358-4258-AEFE-C343ADA4944D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketEase.Domain", "TicketEase.Domain\TicketEase.Domain.csproj", "{3012D8EF-5F3B-4EE3-8DBF-A67A0BF4C666}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketEase.Application", "TicketEase.Application\TicketEase.Application.csproj", "{CBFC2196-0DEF-4B42-A741-0A19A7B49E1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketEase.Common", "TicketEase.Common\TicketEase.Common.csproj", "{AEE6E047-BF30-4A4C-A7A1-16C8554B9776}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{94878B47-5080-4834-BAD9-21F8B69E480D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94878B47-5080-4834-BAD9-21F8B69E480D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94878B47-5080-4834-BAD9-21F8B69E480D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B62803C7-C358-4258-AEFE-C343ADA4944D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B62803C7-C358-4258-AEFE-C343ADA4944D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B62803C7-C358-4258-AEFE-C343ADA4944D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B62803C7-C358-4258-AEFE-C343ADA4944D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3012D8EF-5F3B-4EE3-8DBF-A67A0BF4C666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3012D8EF-5F3B-4EE3-8DBF-A67A0BF4C666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3012D8EF-5F3B-4EE3-8DBF-A67A0BF4C666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3012D8EF-5F3B-4EE3-8DBF-A67A0BF4C666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBFC2196-0DEF-4B42-A741-0A19A7B49E1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFC2196-0DEF-4B42-A741-0A19A7B49E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFC2196-0DEF-4B42-A741-0A19A7B49E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFC2196-0DEF-4B42-A741-0A19A7B49E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEE6E047-BF30-4A4C-A7A1-16C8554B9776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE6E047-BF30-4A4C-A7A1-16C8554B9776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE6E047-BF30-4A4C-A7A1-16C8554B9776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE6E047-BF30-4A4C-A7A1-16C8554B9776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
