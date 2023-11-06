@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TicketEase.Persistence")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dace7365f894a5d08dbcd7f184e236ab05760a88")]
 [assembly: System.Reflection.AssemblyProductAttribute("TicketEase.Persistence")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TicketEase.Persistence")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
