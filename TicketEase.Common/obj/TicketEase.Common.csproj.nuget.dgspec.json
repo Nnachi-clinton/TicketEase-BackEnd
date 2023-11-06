@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\OneDrive\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {}
+    "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\OneDrive\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {
+    "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
-        "projectName": "TicketEase.Common",
-        "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\obj\\",
+        "projectUniqueName": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj",
+        "projectName": "TicketEase.Application",
+        "projectPath": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj",
+        "packagesPath": "C:\\Users\\omoru\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\omoru\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -39,9 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -68,26 +65,86 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.23, 6.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.23, 6.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.23, 6.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100-rc.2.23502.2\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
+        "projectName": "TicketEase.Common",
+        "projectPath": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
+        "packagesPath": "C:\\Users\\omoru\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\omoru\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj": {
+                "projectPath": "C:\\Users\\omoru\\Desktop\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Serilog.Settings.Configuration": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
