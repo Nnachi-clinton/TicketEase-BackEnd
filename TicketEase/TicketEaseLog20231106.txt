@@ -1,0 +1,18 @@
+2023-11-06 08:34:12.174 +01:00 [INF] Now listening on: https://localhost:7075
+2023-11-06 08:34:12.423 +01:00 [INF] Now listening on: http://localhost:5075
+2023-11-06 08:34:12.543 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-11-06 08:34:12.620 +01:00 [INF] Hosting environment: Development
+2023-11-06 08:34:12.759 +01:00 [INF] Content root path: C:\Users\Decagon\source\repos\TicketEase\TicketEase\
+2023-11-06 08:34:17.509 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger/index.html - -
+2023-11-06 08:34:17.509 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger - -
+2023-11-06 08:34:17.932 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger - - - 0 - - 439.4423ms
+2023-11-06 08:34:19.750 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger/index.html - - - 200 - text/html;charset=utf-8 2260.8279ms
+2023-11-06 08:34:20.404 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/_framework/aspnetcore-browser-refresh.js - -
+2023-11-06 08:34:20.987 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/_vs/browserLink - -
+2023-11-06 08:34:21.509 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/_framework/aspnetcore-browser-refresh.js - - - 200 11990 application/javascript;+charset=utf-8 1104.8838ms
+2023-11-06 08:34:22.223 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 1236.1565ms
+2023-11-06 08:34:22.489 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger/favicon-32x32.png - -
+2023-11-06 08:34:22.616 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-11-06 08:34:22.627 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger/favicon-32x32.png - - - 0 628 image/png 137.7910ms
+2023-11-06 08:34:22.704 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger/v1/swagger.json - -
+2023-11-06 08:34:23.329 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 624.3495ms
