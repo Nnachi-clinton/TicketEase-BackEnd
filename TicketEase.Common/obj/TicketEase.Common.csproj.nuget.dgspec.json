@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Common\\TicketEase.Common.csproj": {}
+    "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\TicketEase.Application.csproj": {
+    "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\TicketEase.Application.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj",
         "projectName": "TicketEase.Application",
-        "projectPath": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\TicketEase.Application.csproj",
-        "packagesPath": "C:\\Users\\Decagon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\obj\\",
+        "projectPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Decagon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -29,8 +27,7 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/PremiumDigitalDev/_packaging/PremiumBankNugets/nuget/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -73,28 +70,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Common\\TicketEase.Common.csproj": {
+    "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Common\\TicketEase.Common.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
         "projectName": "TicketEase.Common",
-        "projectPath": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Common\\TicketEase.Common.csproj",
-        "packagesPath": "C:\\Users\\Decagon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Common\\obj\\",
+        "projectPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\TicketEase.Common.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Decagon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -102,15 +97,17 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/PremiumDigitalDev/_packaging/PremiumBankNugets/nuget/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\TicketEase.Application.csproj": {
-                "projectPath": "C:\\Users\\Decagon\\source\\repos\\TicketEase\\TicketEase.Application\\TicketEase.Application.csproj"
+              "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj": {
+                "projectPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Application\\TicketEase.Application.csproj"
+              },
+              "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\TicketEase.Domain.csproj": {
+                "projectPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\TicketEase.Domain.csproj"
               }
             }
           }
@@ -125,13 +122,13 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Serilog.AspNetCore": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[6.0.0, )"
             },
-            "Serilog.Settings.Configuration": {
+            "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[6.0.0, )"
             }
           },
           "imports": [
@@ -150,7 +147,73 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\TicketEase.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\TicketEase.Domain.csproj",
+        "projectName": "TicketEase.Domain",
+        "projectPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\TicketEase.Domain.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\SQ017-TicketEase-Live-Project-Backend\\TicketEase.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
