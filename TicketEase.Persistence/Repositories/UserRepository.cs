@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using TicketEase.Application.Interfaces.Repositories;
+using TicketEase.Domain.Entities;
+using TicketEase.Persistence.Context;
 
 namespace TicketEase.Persistence.Repositories
 {
-    internal class UserRepository
+    public class UserRepository : GenericRepository<AppUser>, IUserRepository
     {
-    }
+        public UserRepository(TicketEaseDbContext ticketEaseDbContext): base(ticketEaseDbContext) { }
+
+	}
 }

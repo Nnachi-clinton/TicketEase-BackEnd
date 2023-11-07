@@ -17,4 +17,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TicketEase.Domain\TicketEase.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
