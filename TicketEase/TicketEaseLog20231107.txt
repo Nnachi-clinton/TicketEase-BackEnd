@@ -1,0 +1,13 @@
+2023-11-07 16:00:55.116 +01:00 [INF] Now listening on: https://localhost:7075
+2023-11-07 16:00:55.261 +01:00 [INF] Now listening on: http://localhost:5075
+2023-11-07 16:00:55.296 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-11-07 16:00:55.308 +01:00 [INF] Hosting environment: Development
+2023-11-07 16:00:55.316 +01:00 [INF] Content root path: C:\Users\user\Desktop\Live PROJECT\Amended\SQ017-TicketEase-Live-Project-Backend\TicketEase\
+2023-11-07 16:00:56.236 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger/index.html - -
+2023-11-07 16:00:57.934 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/_framework/aspnetcore-browser-refresh.js - -
+2023-11-07 16:00:57.945 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger/index.html - - - 200 - text/html;charset=utf-8 1725.7332ms
+2023-11-07 16:00:57.949 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/_framework/aspnetcore-browser-refresh.js - - - 200 12352 application/javascript;+charset=utf-8 14.1855ms
+2023-11-07 16:00:58.007 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/_vs/browserLink - -
+2023-11-07 16:00:58.190 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 183.1143ms
+2023-11-07 16:00:59.726 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7075/swagger/v1/swagger.json - -
+2023-11-07 16:01:00.049 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7075/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 323.3627ms
