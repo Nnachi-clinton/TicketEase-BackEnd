@@ -1,9 +1,20 @@
 using TicketEase.Configurations;
+using TicketEase.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var configuration = builder.Configuration;
+
+// Add services to the container.
+
+// Authentication configuration
+builder.Services.AddAuthentication();
+builder.Services.AuthenticationConfiguration(configuration);
+
+// Identity  configuration
+builder.Services.IdentityConfiguration();
 builder.Services.AddLoggingConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
