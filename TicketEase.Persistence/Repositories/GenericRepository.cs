@@ -24,7 +24,7 @@ namespace TicketEase.Persistence.Repositories
 
 		public List<T> GetAll()=>_ticketEaseDbContext.Set<T>().ToList();
 
-		public T GetById(int id)=>_ticketEaseDbContext.Set<T>().Find(id);
+		public T GetById(string id)=>_ticketEaseDbContext.Set<T>().Find(id);
 
 		public void Update(T entity)=>_ticketEaseDbContext.Set<T>().Update(entity);
 	}

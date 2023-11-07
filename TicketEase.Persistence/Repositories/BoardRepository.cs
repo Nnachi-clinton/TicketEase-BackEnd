@@ -1,4 +1,5 @@
-﻿using TicketEase.Application.Interfaces.Repositories;
+﻿using System.Linq.Expressions;
+using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Domain.Entities;
 using TicketEase.Persistence.Context;
 
@@ -14,7 +15,27 @@ namespace TicketEase.Persistence.Repositories
 
 		public List<Board> GetBoards()
 		{
-			throw new NotImplementedException();
+			return GetAll();
+		}
+		public void AddBoard(Board board)
+		{
+			Add(board);
+		}
+		public void DeleteBoard(Board board)
+		{
+			Delete(board);
+		}
+		public List<Board> FindBoard(Expression<Func<Board, bool>> condition)
+		{
+			return Find(condition);
+		}
+		public Board GetBoardById(string id)
+		{
+			return GetById(id);
+		}
+		public void UpdateBoard(Board board)
+		{
+			Update(board);
 		}
 	}
 }
