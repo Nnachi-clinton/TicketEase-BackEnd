@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TicketEase.Domain.Entities;
 
 namespace TicketEase.Application.Interfaces.Repositories
 {
@@ -15,6 +16,9 @@ namespace TicketEase.Application.Interfaces.Repositories
 		IProjectRepository ProjectRepository { get; }	
 		ITicketRepository TicketRepository { get; }
 		IUserRepository UserRepository { get; }
-		int SaveChanges();
+
+
+       
+        int SaveChanges();
 	}
 }

@@ -14,6 +14,8 @@ namespace TicketEase.Persistence.Context
         }
 
         public DbSet<Board> Boards { get; set; }
+        public DbSet<MailRequest> MailRequests { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Payment> Payments { get; set; }

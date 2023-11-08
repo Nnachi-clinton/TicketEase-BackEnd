@@ -39,5 +39,7 @@ namespace TicketEase.Persistence.Repositories
 		{
 			Update(appUser);
 		}
-	}
+
+
+    }
 }
