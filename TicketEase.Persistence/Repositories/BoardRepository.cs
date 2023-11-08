@@ -8,7 +8,7 @@ namespace TicketEase.Persistence.Repositories
 	public class BoardRepository : GenericRepository<Board>, IBoardRepository
 	{
 		private readonly TicketEaseDbContext _ticketEaseDbContext;
-		public BoardRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext)
+		public BoardRepository(TicketEaseDbContext ticketEaseDbContext): base(ticketEaseDbContext)
 		{
 			_ticketEaseDbContext = ticketEaseDbContext;
 		}

@@ -1,10 +1,8 @@
-﻿using TicketEase.Application.DTO;
-
-namespace TicketEase.Common.Utilities
+﻿namespace TicketEase.Common.Utilities
 {
     public static class Pagination<T>
     {
-        public static async Task<PaginationResponseDto<IEnumerable<T>>> GetPager(
+        public static async Task<PageResult<IEnumerable<T>>> GetPager(
             IEnumerable<T> data,
             int PerPage,
             int Page,
@@ -19,7 +17,7 @@ namespace TicketEase.Common.Utilities
             int totalPagedCount = (int)Math.Ceiling((double)totalData / PerPage);
             var pagedData = data.Skip((Page - 1) * PerPage).Take(PerPage);
 
-            return new PaginationResponseDto<IEnumerable<T>>
+            return new PageResult<IEnumerable<T>>
             {
                 Data = pagedData,
                 TotalPageCount = totalPagedCount,

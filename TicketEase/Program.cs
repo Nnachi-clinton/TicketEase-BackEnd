@@ -1,5 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using TicketEase.Application.Interfaces.Repositories;
+using TicketEase.Application.Interfaces.Services;
+using TicketEase.Application.ServicesImplementation;
 using TicketEase.Configurations;
+using TicketEase.Mapper;
+using TicketEase.Persistence.Context;
 using TicketEase.Persistence.Extensions;
+using TicketEase.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +26,15 @@ var env = builder.Environment;
 
 
 // Authentication configuration
+builder.Services.AddDbContext<TicketEaseDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TicketEaseConnection"))
+);
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IBoardServices, BoardServices>();
+
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 builder.Services.AddAuthentication();
 builder.Services.AuthenticationConfiguration(configuration);
 
