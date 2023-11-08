@@ -17,8 +17,7 @@ namespace TicketEase.Domain.Entities
         public string AppUserId { get; set; }
 
         [ForeignKey("ProjectId")]
-        public string ProjectId { get; set; }             
-        //public Project Project { get; set; }
+        public string ProjectId { get; set; }
         public ICollection<Comment> Comment { get; set; }
     }
 }

@@ -11,15 +11,9 @@ namespace TicketEase.Persistence.Repositories
 	{
 		public ProjectRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext) { }
 
-		public void AddProject(Project project)
-		{
-			Add(project);
-		}
+		public void AddProject(Project project) => Add(project);
 
-		public void DeleteProject(Project project)
-		{
-			Delete(project);
-		}
+		public void DeleteProject(Project project) => Delete(project);
 
 		public List<Project> FindProject(Expression<Func<Project, bool>> condition)
 		{
@@ -36,10 +30,7 @@ namespace TicketEase.Persistence.Repositories
 			return GetAll();
 		}
 
-		public void UpdateProject(Project project)
-		{
-			Update(project);
-		}
+		public void UpdateProject(Project project) => Update(project);
 	}
 }
 	

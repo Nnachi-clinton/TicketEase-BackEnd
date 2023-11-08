@@ -35,13 +35,25 @@
             Data = data;
             Errors = errors;
         }
-        public static ApiResponse<T> Success(T data, string message, int statusCode)
+		public ApiResponse(bool isSucceeded, string message, int statusCode, List<string> errors)
+		{
+			Succeeded = isSucceeded;
+			Errors = errors;
+            Message = message;
+            StatusCode = statusCode;
+            Errors = errors;
+		}
+		public static ApiResponse<T> Success(T data, string message, int statusCode)
         {
             return new ApiResponse<T>(true, message, statusCode, data, new List<string>());
         }
         public static ApiResponse<T> Failed(List<string> errors)
         {
             return new ApiResponse<T>(false, default, errors);
-        } 
-    }
+        }
+		public static ApiResponse<T> Failed(bool isSucceeded, string message, int statusCode,List<string> errors)
+		{
+			return new ApiResponse<T>(isSucceeded,message, statusCode, errors);
+		}
+	}
 }

@@ -10,15 +10,9 @@ namespace TicketEase.Persistence.Repositories
 	{
 		public PaymentRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext) { }
 
-		public void AddPayment(Payment payment)
-		{
-			Add(payment);
-		}
+		public void AddPayment(Payment payment) => Add(payment);
 
-		public void DeletePayment(Payment payment)
-		{
-			Delete(payment);
-		}
+		public void DeletePayment(Payment payment) => Delete(payment);
 
 		public List<Payment> FindPayment(Expression<Func<Payment, bool>> condition)
 		{
@@ -35,9 +29,6 @@ namespace TicketEase.Persistence.Repositories
 			return GetAll();
 		}
 
-		public void UpdatePayment(Payment payment)
-		{
-			Update(payment);
-		}
+		public void UpdatePayment(Payment payment) => Update(payment);
 	}
 }

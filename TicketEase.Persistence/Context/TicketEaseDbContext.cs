@@ -8,10 +8,7 @@ namespace TicketEase.Persistence.Context
     public class TicketEaseDbContext : IdentityDbContext<AppUser>
     {
         public TicketEaseDbContext(DbContextOptions<TicketEaseDbContext> options)
-            : base(options)
-        {
-
-        }
+            : base(options){}
 
         public DbSet<Board> Boards { get; set; }
         public DbSet<MailRequest> MailRequests { get; set; }

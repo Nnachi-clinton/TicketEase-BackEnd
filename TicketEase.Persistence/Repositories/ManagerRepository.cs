@@ -10,15 +10,9 @@ namespace TicketEase.Persistence.Repositories
 	{
 		public ManagerRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext) { }
 
-		public void AddManager(Manager manager)
-		{
-			Add(manager);
-		}
+		public void AddManager(Manager manager) => Add(manager);
 
-		public void DeleteManager(Manager manager)
-		{
-			Delete(manager);
-		}
+		public void DeleteManager(Manager manager) => Delete(manager);
 
 		public List<Manager> FindManager(Expression<Func<Manager, bool>> condition)
 		{
@@ -35,9 +29,7 @@ namespace TicketEase.Persistence.Repositories
 			return GetAll();
 		}
 
-		public void UpdateManager(Manager manager)
-		{
-			Update(manager);
-		}
+		public void UpdateManager(Manager manager) => Update(manager);
+
 	}
 }
