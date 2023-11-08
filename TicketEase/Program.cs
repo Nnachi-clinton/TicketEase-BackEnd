@@ -27,10 +27,12 @@ var env = builder.Environment;
 
 // Authentication configuration
 builder.Services.AddDbContext<TicketEaseDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TicketEaseConnection"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString"))
 );
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBoardServices, BoardServices>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MapperProfile));

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TicketEase.Application\TicketEase.Application.csproj" />
     <ProjectReference Include="..\TicketEase.Common\TicketEase.Common.csproj" />
   </ItemGroup>
 

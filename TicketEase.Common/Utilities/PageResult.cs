@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TicketEase.Common.Utilities
+﻿namespace TicketEase.Common.Utilities
 {
-    public class PageResult<T>
+	public class PageResult<T>
     {
         public T Data { get; set; }
         public int PerPage { get; set; }
@@ -15,3 +9,4 @@ namespace TicketEase.Common.Utilities
         public int TotalCount { get; set; }
     }
 }
+  

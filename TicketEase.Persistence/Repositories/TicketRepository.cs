@@ -1,5 +1,4 @@
-﻿
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Domain.Entities;
 using TicketEase.Persistence.Context;
@@ -22,6 +21,16 @@ namespace TicketEase.Persistence.Repositories
 		public Ticket GetTicketById(string id)
 		{
 			return GetById(id);
+		}
+
+		public async Task<List<Ticket>> GetTicketByProjectId(Expression<Func<Ticket, bool>> condition)
+		{
+			return Find(condition);
+		}
+
+		public async Task<List<Ticket>> GetTicketByUserId(Expression<Func<Ticket, bool>> condition)
+		{
+			return Find(condition);
 		}
 
 		public List<Ticket> GetTickets()
