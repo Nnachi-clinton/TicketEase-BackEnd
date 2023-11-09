@@ -1,13 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TicketEase.Application.Interfaces.Repositories;
-using TicketEase.Application.Interfaces.Services;
-using TicketEase.Application.ServicesImplementation;
-using Microsoft.EntityFrameworkCore;
-using Serilog.Core;
-using TicketEase.Application.Interfaces.Repositories;
-using TicketEase.Application.Interfaces.Services;
-using TicketEase.Application.ServicesImplementation;
 using TicketEase.Common.Utilities;
 using TicketEase.Configurations;
 using TicketEase.Domain.Entities;
@@ -23,6 +15,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 var env = builder.Environment;
 
+builder.Services.AddDependencies(builder.Configuration);
 
 //builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<IBoardServices, BoardServices>();
@@ -36,7 +29,6 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddAuthentication();
 builder.Services.AuthenticationConfiguration(configuration);
-builder.Services.AddAutoMapper(typeof(Program));
 
 // Identity  configuration
 builder.Services.IdentityConfiguration();
@@ -52,7 +44,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TicketEaseDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSwagger();
 
@@ -67,10 +59,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+	app.UseDeveloperExceptionPage();
 
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ticket Ease v1"));
+	app.UseSwagger();
+	app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ticket Ease v1"));
 }
 using (var scope = app.Services.CreateScope())
 {

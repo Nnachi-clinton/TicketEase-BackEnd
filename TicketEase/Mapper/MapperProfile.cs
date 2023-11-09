@@ -26,6 +26,7 @@ namespace TicketEase.Mapper
             CreateMap<Board, BoardResponseDto>().ReverseMap();
             CreateMap<AppUser, AppUserDto>();
             CreateMap<PageResult<IEnumerable<AppUser>>, PageResult<IEnumerable<AppUserDto>>>();
+            CreateMap<UpdateUserDto, AppUser>();
         }
     }
 }

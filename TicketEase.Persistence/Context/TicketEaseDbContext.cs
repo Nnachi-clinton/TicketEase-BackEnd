@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TicketEase.Common.Utilities;
 using TicketEase.Domain.Entities;
 
 namespace TicketEase.Persistence.Context

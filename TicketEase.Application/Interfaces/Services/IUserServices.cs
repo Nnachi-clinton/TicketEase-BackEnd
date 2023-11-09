@@ -8,5 +8,6 @@ namespace TicketEase.Application.Interfaces.Services
     {
         Task<ApiResponse<AppUserDto>> GetUserByIdAsync(string userId);
         Task<ApiResponse<PageResult<IEnumerable<AppUserDto>>>> GetUsersByPaginationAsync(int page, int perPage);
+        Task<ApiResponse<bool>> UpdateUserAsync(string userId, UpdateUserDto userUpdateDto);
     }
 }

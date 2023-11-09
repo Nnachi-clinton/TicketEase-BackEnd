@@ -21,7 +21,7 @@ namespace TicketEase.Persistence.Extensions
             var emailSettings = new EmailSettings();
             config.GetSection("EmailSettings").Bind(emailSettings);
             services.AddSingleton(emailSettings);
-
+            
 
 
 

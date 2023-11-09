@@ -70,7 +70,34 @@ namespace TicketEase.Application.ServicesImplementation
             }
         }
 
+        public async Task<ApiResponse<bool>> UpdateUserAsync(string userId, UpdateUserDto updateUserDto)
+        {
+            try
+            {
+                var user = _unitOfWork.UserRepository.GetUserById(userId);
+
+                if (user == null)
+                {
+                    return ApiResponse<bool>.Failed(false, "User not found.", 404, new List<string> { "User not found." });
+                }
+
+                _mapper.Map(updateUserDto, user);
+
+                _unitOfWork.UserRepository.UpdateUser(user);
+                _unitOfWork.SaveChanges();
+
+                return ApiResponse<bool>.Success(true, "User updated successfully.", 200);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while updating the user. UserID: {UserId}", userId);
+
+                return ApiResponse<bool>.Failed(false, "An error occurred while updating the user.", 500, new List<string> { ex.Message });
+            }
+        }
     }
+
 }
+
 
 
