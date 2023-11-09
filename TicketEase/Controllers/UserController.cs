@@ -7,7 +7,6 @@ namespace TicketEase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userServices;

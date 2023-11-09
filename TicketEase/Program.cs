@@ -17,14 +17,6 @@ var env = builder.Environment;
 
 builder.Services.AddDependencies(builder.Configuration);
 
-//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-//builder.Services.AddScoped<IBoardServices, BoardServices>();
-//builder.Services.AddScoped<ITicketService, TicketService>();
-//builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-//builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-//builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddAuthentication();
