@@ -1,93 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TicketEase.Domain.Entities;
-
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TicketEase.Common.Utilities
 {
-    public class Seeder
-    {
-        private static string adminRoleId;
-        private static string superAdminRoleId;
-        private static string userRoleId;
+	public class Seeder
+	{
+		public static void SeedRolesAndSuperAdmin(IServiceProvider serviceProvider)
+		{
+			var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
-        public static void SeedData(ModelBuilder builder)
-        {
-            SeedRoles(builder);
-            SeedSuperAdminUser(builder);
-        }
+			// Seed roles
+			if (!roleManager.RoleExistsAsync("SuperAdmin").Result)
+			{
+				var role = new IdentityRole("SuperAdmin");
+				roleManager.CreateAsync(role).Wait();
+			}
 
-        private static void SeedRoles(ModelBuilder builder)
-        {
-            var roles = new List<IdentityRole>
-        {
-            new IdentityRole
-            {   Id = Guid.NewGuid().ToString(),
-                Name = "Manager",
-                NormalizedName = "Manager"
-            },
-            new IdentityRole
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "SuperAdmin",
-                NormalizedName = "SuperAdmin"
-            },
-            new IdentityRole
-            {
+			if (!roleManager.RoleExistsAsync("Manager").Result)
+			{
+				var role = new IdentityRole("Manager");
+				roleManager.CreateAsync(role).Wait();
+			}
 
-                Id = Guid.NewGuid().ToString(),
-                Name = "User",
-                NormalizedName = "User"
-            }
-        };
+			if (!roleManager.RoleExistsAsync("User").Result)
+			{
+				var role = new IdentityRole("User");
+				roleManager.CreateAsync(role).Wait();
+			}
 
-            builder.Entity<IdentityRole>().HasData(roles);
+			// Seed users with roles
+			if (userManager.FindByNameAsync("Admin").Result == null)
+			{
+				var user = new AppUser
+				{
+					UserName = "Admin",
+					Email = "admin@ticketease.com",
+					EmailConfirmed = true,
+					FirstName = "Admin",
+					IsActive = true,
+					CreatedAt = DateTime.UtcNow
+				};
 
-            // Store the role IDs for later use
-            adminRoleId = roles.First(r => r.NormalizedName == "Manager").Id;
-            superAdminRoleId = roles.First(r => r.NormalizedName == "SuperAdmin").Id;
-            userRoleId = roles.First(r => r.NormalizedName == "User").Id;
-        }
+				var result = userManager.CreateAsync(user, "Password@123").Result;
 
-        private static void SeedSuperAdminUser(ModelBuilder builder)
-        {
-            var superAdminId = Guid.NewGuid().ToString();
-            var superAdminUser = new IdentityUser
-            {
-                UserName = "superadmin@library.com",
-                Email = "superadmin@library.com",
-                NormalizedEmail = "superadmin@library.com".ToUpper(),
-                NormalizedUserName = "superadmin@library.com".ToUpper(),
-                Id = superAdminId
-            };
+				if (result.Succeeded)
+				{
+					userManager.AddToRoleAsync(user, "SuperAdmin").Wait();
+				}
+			}
+		}
 
-            superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "SuperAdmin@123");
-            builder.Entity<IdentityUser>().HasData(superAdminUser);
-
-            // Use the stored role IDs
-            var superAdminRoles = new List<IdentityUserRole<string>>
-        {
-            new IdentityUserRole<string>
-            {
-                RoleId = adminRoleId,
-                UserId = superAdminId
-            },
-            new IdentityUserRole<string>
-            {
-                RoleId = superAdminRoleId,
-                UserId = superAdminId
-            },
-            new IdentityUserRole<string>
-            {
-                RoleId = userRoleId,
-                UserId = superAdminId
-            }
-        };
-
-            builder.Entity<IdentityUserRole<string>>().HasData(superAdminRoles);
-        }
-    }
+	}
 }

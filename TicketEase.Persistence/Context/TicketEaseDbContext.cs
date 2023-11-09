@@ -21,11 +21,6 @@ namespace TicketEase.Persistence.Context
 		public DbSet<Ticket> Tickets { get; set; }
 
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
-			Seeder.SeedData(modelBuilder);
-		}
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			foreach (var item in ChangeTracker.Entries<BaseEntity>())

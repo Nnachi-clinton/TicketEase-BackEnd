@@ -10,15 +10,9 @@ namespace TicketEase.Persistence.Repositories
 	{
         public CommentRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext) { }
 
-		public void AddComment(Comment comment)
-		{
-			Add(comment);
-		}
+		public void AddComment(Comment comment)=>Add(comment);
 
-		public void DeleteComment(Comment comment)
-		{
-			Delete(comment);
-		}
+		public void DeleteComment(Comment comment)=>Delete(comment);
 
 		public List<Comment> FindComment(Expression<Func<Comment, bool>> condition)
 		{
@@ -35,11 +29,7 @@ namespace TicketEase.Persistence.Repositories
 			return GetAll();
 		}
 
-		public void UpdateComment(Comment comment)
-		{
-			Update(comment);
-		}
-
+		public void UpdateComment(Comment comment)=>Update(comment);
 	
 	}
 }

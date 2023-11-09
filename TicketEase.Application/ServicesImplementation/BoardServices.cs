@@ -44,8 +44,8 @@ namespace TicketEase.Application.ServicesImplementation
             {
                 _logger.LogError(ex, "Error occurred while adding a board");
                 var errorList = new List<string>();
-                errorList.Add(ex.Message);
-                response = new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
+                errorList.Add(ex.InnerException.ToString());
+                response = new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, errorList);
                 return response;
             }
         }
