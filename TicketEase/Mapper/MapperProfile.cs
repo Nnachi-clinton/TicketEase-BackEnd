@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TicketEase.Application.DTO;
+using TicketEase.Common.Utilities;
 using TicketEase.Domain.Entities;
 
 using AutoMapper;
@@ -23,6 +24,8 @@ namespace TicketEase.Mapper
             CreateMap<Project, ProjectReponseDto>().ReverseMap();
             CreateMap<BoardRequestDto, Board>();
             CreateMap<Board, BoardResponseDto>().ReverseMap();
+            CreateMap<AppUser, AppUserDto>();
+            CreateMap<PageResult<IEnumerable<AppUser>>, PageResult<IEnumerable<AppUserDto>>>();
         }
     }
 }

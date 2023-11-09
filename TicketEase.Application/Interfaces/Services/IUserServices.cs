@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TicketEase.Application.DTO;
+using TicketEase.Common.Utilities;
+using TicketEase.Domain;
 
 namespace TicketEase.Application.Interfaces.Services
 {
-    internal interface IUserServices
+    public interface IUserServices
     {
+        Task<ApiResponse<AppUserDto>> GetUserByIdAsync(string userId);
+        Task<ApiResponse<PageResult<IEnumerable<AppUserDto>>>> GetUsersByPaginationAsync(int page, int perPage);
     }
 }

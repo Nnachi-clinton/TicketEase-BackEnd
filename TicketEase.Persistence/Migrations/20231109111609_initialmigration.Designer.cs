@@ -12,8 +12,8 @@ using TicketEase.Persistence.Context;
 namespace TicketEase.Persistence.Migrations
 {
     [DbContext(typeof(TicketEaseDbContext))]
-    [Migration("20231108223604_Initial")]
-    partial class Initial
+    [Migration("20231109111609_initialmigration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

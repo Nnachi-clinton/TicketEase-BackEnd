@@ -25,7 +25,7 @@ namespace TicketEase.Persistence.Extensions
 
 
 
-           // services.AddDbContext<DataContext>();
+            // services.AddDbContext<DataContext>();
 
            // services.AddTransient<IEmailService, EmailService>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -37,6 +37,7 @@ namespace TicketEase.Persistence.Extensions
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IUserServices, UserServices>();
 
 
 
