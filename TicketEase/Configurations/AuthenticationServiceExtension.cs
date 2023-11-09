@@ -8,9 +8,14 @@ namespace TicketEase.Persistence.Extensions
     {
         public static void AuthenticationConfiguration(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            var secretKey = configuration.GetSection("JwtSettings : Secret");
+            var secretKey = configuration.GetSection("JwtSettings:Secret");
+
+
+
+
             var TokenParameters = new TokenValidationParameters
             {
+
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateLifetime = true,
@@ -18,7 +23,7 @@ namespace TicketEase.Persistence.Extensions
                 ValidAudience = configuration["JwtSettings:ValidAudience"],
                 ValidIssuer = configuration["JwtSettings:ValidIssuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding
-                    .UTF8.GetBytes("SecretKey")),
+                    .UTF8.GetBytes("secretKey")),
                 ClockSkew = TimeSpan.Zero
             };
             serviceCollection.AddSingleton(TokenParameters);
