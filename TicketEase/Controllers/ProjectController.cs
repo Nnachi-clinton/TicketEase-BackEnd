@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TicketEase.Application.DTO.Project;
 using TicketEase.Application.Interfaces.Services;
+using TicketEase.Common.Utilities;
+using TicketEase.Domain.Entities;
 
 namespace TicketEase.Controllers
 {
@@ -26,6 +27,13 @@ namespace TicketEase.Controllers
         {
             return Ok(await _projectServices.UpdateProjectAsync(boardId, projectId, projectUpdate));
         }
+
+        [HttpGet("{projectId}")]
+        public async Task<IActionResult> GetProjectById(string projectId) => Ok( await _projectServices.GetProjectByIdAsync(projectId));
+
+        [HttpGet("GetProjectsByBoardId")]
+        public async Task<IActionResult> GetProjectsByBoardId(string boardId, int perPage, int page)
+            => Ok(await _projectServices.GetProjectsByBoardIdAsync(boardId, perPage, page));
 
     }
 }
