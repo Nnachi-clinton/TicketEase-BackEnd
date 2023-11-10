@@ -16,9 +16,9 @@ namespace TicketEase.Controllers
 		}
 
         [HttpPost("add-ticket")]
-        public IActionResult AddTicket([FromBody] TicketDto ticketDTO)
+        public IActionResult AddTicket(string userId, string projectId, [FromBody] TicketRequestDto ticketRequestDTO)
         {
-            var response = _ticketService.AddTicket(ticketDTO);
+            var response = _ticketService.AddTicket(userId, projectId, ticketRequestDTO);
             if (response.Succeeded)
             {
                 return Ok(response);
@@ -26,10 +26,11 @@ namespace TicketEase.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("edit-ticket/{Id}")]
-        public IActionResult EditTicket(string Id, [FromBody] UpdateTicketDto updatedTicketDTO)
+
+        [HttpPut("edit-ticket/{ticketId}")]
+        public IActionResult EditTicket(string ticketId, [FromBody] UpdateTicketRequestDto updatedTicketRequestDTO)
         {
-            var response = _ticketService.EditTicket(Id, updatedTicketDTO);
+            var response = _ticketService.EditTicket(ticketId, updatedTicketRequestDTO);
             if (response.Succeeded)
             {
                 return Ok(response);

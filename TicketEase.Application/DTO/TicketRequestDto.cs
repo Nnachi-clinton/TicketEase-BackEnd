@@ -2,7 +2,7 @@
 
 namespace TicketEase.Application.DTO
 {
-    public class UpdateTicketDto
+    public class TicketRequestDto
     {
         public string Title { get; set; }
         public string Description { get; set; }

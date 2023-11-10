@@ -22,27 +22,33 @@ namespace TicketEase.Application.ServicesImplementation
             _logger = logger;
         }
 
-        public ApiResponse<bool> AddTicket(TicketDto ticketDTO)
+        public ApiResponse<TicketResponseDto> AddTicket(string userId, string ProjectId, TicketRequestDto ticketDTO)
         {
+            ApiResponse<TicketResponseDto> response;
             try
             {
                 var ticketEntity = _mapper.Map<Ticket>(ticketDTO);
                 ticketEntity.TicketReference = TicketHelper.GenerateTicketReference();
+                ticketEntity.AppUserId = userId;
+                ticketEntity.ProjectId = ProjectId;
+
                 _unitOfWork.TicketRepository.AddTicket(ticketEntity);
                 _unitOfWork.SaveChanges();
-                _logger.LogInformation("Ticket added successfully");
-                return ApiResponse<bool>.Success(true, "Ticket added successfully", 200);
+
+                var responseDto = _mapper.Map<TicketResponseDto>(ticketEntity);
+                response = new ApiResponse<TicketResponseDto>(true, $"Successfully added a ticket", 201, responseDto, new List<string>());
+                return response;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while adding a ticket");
-                return ApiResponse<bool>.Failed(new List<string> { "Error: " + ex.Message });
+                return ApiResponse<TicketResponseDto>.Failed(new List<string> { "Error: " + ex.Message });
             }
         }
 
-
-        public ApiResponse<bool> EditTicket(string ticketId, UpdateTicketDto updatedTicketDTO)
+        public ApiResponse<TicketResponseDto> EditTicket(string ticketId, UpdateTicketRequestDto updatedTicketDTO)
         {
+            ApiResponse<TicketResponseDto> response;
             try
             {
                 var existingTicket = _unitOfWork.TicketRepository.GetTicketById(ticketId);
@@ -50,7 +56,7 @@ namespace TicketEase.Application.ServicesImplementation
                 if (existingTicket == null)
                 {
                     _logger.LogWarning("Ticket not found while trying to edit");
-                    return ApiResponse<bool>.Failed(new List<string> { "Ticket not found" });
+                    return ApiResponse<TicketResponseDto>.Failed(new List<string> { "Ticket not found" });
                 }
 
                 _mapper.Map(updatedTicketDTO, existingTicket);
@@ -58,13 +64,14 @@ namespace TicketEase.Application.ServicesImplementation
                 _unitOfWork.TicketRepository.UpdateTicket(existingTicket);
                 _unitOfWork.SaveChanges();
 
-                _logger.LogInformation("Ticket updated successfully");
-                return ApiResponse<bool>.Success(true, "Ticket updated successfully", 200);
+                var responseDto = _mapper.Map<TicketResponseDto>(existingTicket);
+                response = new ApiResponse<TicketResponseDto>(true, $"Ticket updated successfully", 200, responseDto, new List<string>());
+                return response;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while editing a ticket");
-                return ApiResponse<bool>.Failed(new List<string> { "Error: " + ex.Message });
+                return ApiResponse<TicketResponseDto>.Failed(new List<string> { "Error: " + ex.Message });
             }
         }
         public async Task<ApiResponse<PageResult<IEnumerable<Ticket>>>> GetTicketByProjectId(string projectId, int page, int perPage)
