@@ -245,4 +245,5 @@ paket-files/
 *.sln.iml
 
 appsettings.Development.json
+appsettings.json
 TicketEase/*.txt
