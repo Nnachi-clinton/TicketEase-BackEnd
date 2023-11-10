@@ -9,7 +9,7 @@ namespace TicketEase.Persistence.Extensions
         public static void AuthenticationConfiguration(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             var secretKey = configuration.GetSection("JwtSettings : Secret");
-
+            
             var TokenParameters = new TokenValidationParameters
             {
 

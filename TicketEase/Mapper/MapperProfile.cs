@@ -22,6 +22,7 @@ namespace TicketEase.Mapper
             CreateMap<UpdateProjectRequestDto, Project>();
 
             CreateMap<Project, ProjectReponseDto>().ReverseMap();
+            CreateMap<Manager, EditManagerDto>().ReverseMap();
             CreateMap<BoardRequestDto, Board>();
             CreateMap<Board, BoardResponseDto>().ReverseMap();
             CreateMap<Ticket, TicketDto>().ReverseMap();
