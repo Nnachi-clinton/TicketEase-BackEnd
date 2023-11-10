@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using TicketEase.Application.DTO;
 using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Application.Interfaces.Services;
+using TicketEase.Common.Utilities;
 using TicketEase.Domain;
 using TicketEase.Domain.Entities;
+//using TicketEase.Common.Utilities;
 
 namespace TicketEase.Application.ServicesImplementation
 {
@@ -13,6 +15,7 @@ namespace TicketEase.Application.ServicesImplementation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<BoardServices> _logger;
+
         public BoardServices(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BoardServices> logger) 
         {
             _unitOfWork = unitOfWork;
@@ -52,30 +55,138 @@ namespace TicketEase.Application.ServicesImplementation
             }
         }
 
+        
+        public async Task<ApiResponse<GetBoardsDto>> GetAllBoardsAsync(int perPage, int page)
+        {
+            try
+            {
+                var boards = _unitOfWork.BoardRepository.GetBoards();
+
+                var boardDtos = _mapper.Map<List<BoardResponseDto>>(boards);
+
+                var pagedBoardDtos = await Pagination<BoardResponseDto>.GetPager(
+                    boardDtos,
+                    perPage,
+                    page,
+                    item => item.Name,
+                    item => item.Id
+                );
+
+                var getBoardsDto = new GetBoardsDto
+                {
+                    Boards = pagedBoardDtos.Data.ToList(),
+                    PerPage = pagedBoardDtos.PerPage,
+                    CurrentPage = pagedBoardDtos.CurrentPage,
+                    TotalPageCount = pagedBoardDtos.TotalPageCount,
+                    TotalCount = pagedBoardDtos.TotalCount
+                };
+
+                return new ApiResponse<GetBoardsDto>(true, "Boards retrieved.", 200, getBoardsDto, new List<string>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting all boards.");
+                return new ApiResponse<GetBoardsDto>(false, "Error occurred while getting all boards.", 500, null, new List<string> { ex.Message });
+            }
+        }
+        
+        
+
+        public async Task<ApiResponse<BoardResponseDto>> GetBoardByIdAsync(string id)
+        {
+            try
+            {
+                var board = _unitOfWork.BoardRepository.GetBoardById(id);
+
+                if (board == null)
+                {
+                    return new ApiResponse<BoardResponseDto>(false, "Board not found.", 404, null, new List<string>());
+                }
+
+                var boardDto = _mapper.Map<BoardResponseDto>(board);
+
+                return new ApiResponse<BoardResponseDto>(true, "Board found.", 200, boardDto, new List<string>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting a board by ID.");
+                return new ApiResponse<BoardResponseDto>(false, "Error occurred while getting a board by ID.", 500, null, new List<string> { ex.Message });
+            }
+        }
         public async Task<ApiResponse<BoardResponseDto>> UpdateBoardAsync(string boardId, BoardRequestDto boardRequestDto)
         {
-            //ApiResponse<BoardResponseDto> response;
             try
             {
                 var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
                 if (existingBoard == null)
-                    return new ApiResponse<BoardResponseDto>(false, 400, $"Board not found.");
+                    return await Task.FromResult(new ApiResponse<BoardResponseDto>(false, 400, $"Board not found."));
 
                 var board = _mapper.Map(boardRequestDto, existingBoard);
                 _unitOfWork.BoardRepository.UpdateBoard(existingBoard);
                 _unitOfWork.SaveChanges();
 
                 var responseDto = _mapper.Map<BoardResponseDto>(board);
-                return new ApiResponse<BoardResponseDto>(true, $"Successfully updated  board", 200, responseDto, new List<string>());
+                return await Task.FromResult(new ApiResponse<BoardResponseDto>(true, $"Successfully updated board", 200, responseDto, new List<string>()));
             }
             catch (Exception ex)
             {
-
-                _logger.LogError(ex, "Error occurred while adding a board");
+                _logger.LogError(ex, "Error occurred while updating a board");
                 var errorList = new List<string>();
                 errorList.Add(ex.Message);
-                return new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
+                return await Task.FromResult(new ApiResponse<BoardResponseDto>(true, "Error occurred while updating a board", 500, null, errorList));
             }
         }
+
+
+        //public Task<ApiResponse<BoardResponseDto>> UpdateBoardAsync(string boardId, BoardRequestDto boardRequestDto)
+        //{
+        //    //ApiResponse<BoardResponseDto> response;
+        //    try
+        //    {
+        //        var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
+        //        if (existingBoard == null)
+        //            return new ApiResponse<BoardResponseDto>(false, 400, $"Board not found.");
+
+        //        var board = _mapper.Map(boardRequestDto, existingBoard);
+        //        _unitOfWork.BoardRepository.UpdateBoard(existingBoard);
+        //        _unitOfWork.SaveChanges();
+
+        //        var responseDto = _mapper.Map<BoardResponseDto>(board);
+        //        return new ApiResponse<BoardResponseDto>(true, $"Successfully updated  board", 200, responseDto, new List<string>());
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        _logger.LogError(ex, "Error occurred while adding a board");
+        //        var errorList = new List<string>();
+        //        errorList.Add(ex.Message);
+        //        return new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
+        //    }
+        //}
+        //public async Task<ApiResponse<BoardResponseDto>> UpdateBoardAsync(string boardId, BoardRequestDto boardRequestDto)
+        //{
+        //    //ApiResponse<BoardResponseDto> response;
+        //    try
+        //    {
+        //        var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
+        //        if (existingBoard == null)
+        //            return new ApiResponse<BoardResponseDto>(false, 400, $"Board not found.");
+
+        //        var board = _mapper.Map(boardRequestDto, existingBoard);
+        //        _unitOfWork.BoardRepository.UpdateBoard(existingBoard);
+        //        _unitOfWork.SaveChanges();
+
+        //        var responseDto = _mapper.Map<BoardResponseDto>(board);
+        //        return new ApiResponse<BoardResponseDto>(true, $"Successfully updated  board", 200, responseDto, new List<string>());
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        _logger.LogError(ex, "Error occurred while adding a board");
+        //        var errorList = new List<string>();
+        //        errorList.Add(ex.Message);
+        //        return new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
+        //    }
+        //}
     }
 }

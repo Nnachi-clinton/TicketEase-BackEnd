@@ -45,8 +45,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<TicketEaseDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
+//builder.Services.AddDbContext<TicketEaseDbContext>(options => 
+//options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
 builder.Services.AddSwagger();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddIdentity<AppUser, IdentityRole>()
