@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TicketEase.Common.Utilities;
 using TicketEase.Configurations;
 using TicketEase.Domain.Entities;
-using TicketEase.Mapper;
 using TicketEase.Persistence.Context;
 using TicketEase.Persistence.Extensions;
 
@@ -17,7 +16,7 @@ var env = builder.Environment;
 
 builder.Services.AddDependencies(builder.Configuration);
 
-builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddAutoMapper(typeof(TicketEase.Mapper.MapperProfile));
 
 builder.Services.AddAuthentication();
 builder.Services.AuthenticationConfiguration(configuration);
@@ -26,7 +25,7 @@ builder.Services.AuthenticationConfiguration(configuration);
 builder.Services.IdentityConfiguration();
 builder.Services.AddLoggingConfiguration(builder.Configuration);
 //builder.Services.AddTransient<Seeder>();
-
+builder.Services.AddMailService(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,13 +35,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TicketEaseDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("TicketEase")));
 
 builder.Services.AddSwagger();
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
-			   .AddEntityFrameworkStores<TicketEaseDbContext>()
-			   .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<AppUser, IdentityRole>()
+//			   .AddEntityFrameworkStores<TicketEaseDbContext>()
+//			   .AddDefaultTokenProviders();
 //builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDependencies(configuration);
 

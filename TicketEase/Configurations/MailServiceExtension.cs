@@ -7,8 +7,6 @@ namespace TicketEase.Configurations
         public static void AddMailService(this IServiceCollection services, IConfiguration config)
         {
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
-
-
         }
     }
 }
