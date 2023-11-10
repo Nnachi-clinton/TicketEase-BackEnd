@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketEase.Persistence.Context;
 
@@ -11,9 +12,10 @@ using TicketEase.Persistence.Context;
 namespace TicketEase.Persistence.Migrations
 {
     [DbContext(typeof(TicketEaseDbContext))]
-    partial class TicketEaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110005752_ManagerEntityMigration")]
+    partial class ManagerEntityMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
