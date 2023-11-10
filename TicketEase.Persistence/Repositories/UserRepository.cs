@@ -29,6 +29,16 @@ namespace TicketEase.Persistence.Repositories
 			return GetById(id);
 		}
 
-		public void UpdateUser(AppUser appUser) => Update(appUser);
+        public void UpdatePhoto(string id, string imageUrl)
+        {
+            var foundUser = GetById(id);
+            if (foundUser!= null)
+            {
+				foundUser.ImageUrl = imageUrl;
+				UpdateUser(foundUser);
+			}
+        }
+
+        public void UpdateUser(AppUser appUser) => Update(appUser);
 	}
 }

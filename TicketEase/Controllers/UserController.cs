@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TicketEase.Application.DTO;
+using TicketEase.Application.DTO.Project;
 using TicketEase.Application.Interfaces.Services;
 using TicketEase.Domain;
 
@@ -7,6 +8,8 @@ namespace TicketEase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Route("api/users")]
+
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userServices;
@@ -57,6 +60,32 @@ namespace TicketEase.Controllers
             _logger.LogError("User update failed: {Message}", updateResult.Message);
             return BadRequest(new ApiResponse<bool>(false, "Failed to update user.", 400, false, updateResult.Errors));
         }
+
+        [HttpPatch("photo/{id}")]
+        public async Task<IActionResult> UpdateUserPhotoByUserId(string id, [FromForm] UpdatePhotoDTO model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest("Invalid user ID");
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var imageUrl = await _userServices.UpdateUserPhotoByUserId(id, model);
+
+                if (imageUrl == null)
+                    return NotFound($"User with ID {id} not found");
+
+                return Ok(new { Url = imageUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating user photo.");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
 
 

@@ -1,6 +1,5 @@
 ﻿using CloudinaryDotNet;
 using Microsoft.Extensions.Options;
-using System.Security.Principal;
 using TicketEase.Domain.Entities;
 
 namespace TicketEase.Configurations

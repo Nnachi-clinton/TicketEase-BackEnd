@@ -1,4 +1,6 @@
-﻿using TicketEase.Application.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using TicketEase.Application.DTO;
+using TicketEase.Application.DTO.Project;
 using TicketEase.Common.Utilities;
 using TicketEase.Domain;
 
@@ -8,6 +10,7 @@ namespace TicketEase.Application.Interfaces.Services
     {
         Task<ApiResponse<AppUserDto>> GetUserByIdAsync(string userId);
         Task<ApiResponse<PageResult<IEnumerable<AppUserDto>>>> GetUsersByPaginationAsync(int page, int perPage);
-        Task<ApiResponse<bool>> UpdateUserAsync(string userId, UpdateUserDto userUpdateDto);
+        Task<string> UpdateUserPhotoByUserId(string id, UpdatePhotoDTO model);
+        Task<ApiResponse<bool>> UpdateUserAsync(string userId, UpdateUserDto updateUserDto);
     }
 }

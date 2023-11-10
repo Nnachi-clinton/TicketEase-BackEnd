@@ -115,18 +115,15 @@ namespace TicketEase.Application.ServicesImplementation
                     Body = $"Business Email: {managerInfoCreateDto.BusinessEmail}\n" +
                            $"Company Name: {managerInfoCreateDto.CompanyName}\n" +
                            $"Reason to Onboard: {managerInfoCreateDto.ReasonToOnboard}"
-
                 };
-
-                await _emailServices.SendHtmlEmailAsync(mailRequest);
                 return ApiResponse<bool>.Success(true, "Manager information sent to admin successfully", 200);
             }
             catch (Exception ex)
             {
-
                 Log.Error(ex, "An error occurred while sending manager information to admin");
-                return ApiResponse<bool>.Failed(new List<string> { "Error: " + ex.Message });
+                return ApiResponse<bool>.Failed(new List<string> { "Error: " + ex.Message }); 
             }
+
         }
 
 
@@ -154,6 +151,44 @@ namespace TicketEase.Application.ServicesImplementation
 
                 return ApiResponse<bool>.Failed(false, "An error occurred while updating the manager profile.", 500, new List<string> { ex.Message });
             }
+        }
+        public string DeactivateManager(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return "Manager Id must be provided";
+            }
+
+            var manager = _unitOfWork.UserRepository.GetUserById(id);
+
+            if (manager != null)
+            {
+                manager.IsActive = false;
+                _unitOfWork.UserRepository.UpdateUser(manager);
+                _unitOfWork.SaveChanges();// Save changes to deactivate
+
+            }
+            return $"Manager with Id {id} has been deactivated successfully";
+
+        }
+
+
+        public string ActivateManager(string id)
+        {
+            var manager = _unitOfWork.UserRepository.GetUserById(id);
+            if (manager != null)
+            {
+                manager.IsActive = true;
+                _unitOfWork.UserRepository.UpdateUser(manager);
+                _unitOfWork.SaveChanges();// Save changes to deactivate
+                return $"Manager with Id {id} has been activated successfully";
+            }
+            else
+            {
+                return "Manager not found";
+            }
+
+
         }
 
     }

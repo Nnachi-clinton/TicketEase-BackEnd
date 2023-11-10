@@ -48,7 +48,7 @@ namespace TicketEase.Application.ServicesImplementation
             var uploadResult = await cloudinary.UploadAsync(upload);
 
             // Update the user's ImageUrl property
-          
+
             user.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
             // Save the updated user entity to the database
@@ -57,7 +57,8 @@ namespace TicketEase.Application.ServicesImplementation
             try
             {
                 _unitOfWork.SaveChanges();
-                return "success";
+               return user.ImageUrl;
+                //return "success";
             }
             catch (Exception ex)
             {
