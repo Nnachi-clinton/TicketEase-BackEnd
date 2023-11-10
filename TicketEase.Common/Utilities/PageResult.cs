@@ -1,6 +1,6 @@
 ﻿namespace TicketEase.Common.Utilities
 {
-	public class PageResult<T>
+    public class PageResult<T>
     {
         public T Data { get; set; }
         public int PerPage { get; set; }
@@ -9,4 +9,3 @@
         public int TotalCount { get; set; }
     }
 }
-  

@@ -1,5 +1,4 @@
-﻿
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using TicketEase.Domain.Entities;
 
 namespace TicketEase.Application.Interfaces.Repositories

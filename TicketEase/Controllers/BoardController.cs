@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketEase.Application.DTO;
 using TicketEase.Application.Interfaces.Services;
@@ -15,16 +15,14 @@ namespace TicketEase.Controllers
             _boardServices = boardServices;
         }
 
+        [Authorize(Roles ="Admin,Manager")]
         [HttpPost("AddBoard")]
         public async Task<IActionResult> AddBoard([FromBody] BoardRequestDto request)
-        {
-            return Ok(await _boardServices.AddBoardAsync(request));
-        }
+            =>  Ok(await _boardServices.AddBoardAsync(request));
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("UpdateBoard/{boardId}")]
         public async Task<IActionResult> UpdateBoard(string boardId, [FromBody] BoardRequestDto request)
-        {
-            return Ok(await _boardServices.UpdateBoardAsync(boardId, request));
-        }
+            => Ok(await _boardServices.UpdateBoardAsync(boardId, request));
     }
 }

@@ -4,7 +4,7 @@ using TicketEase.Persistence.Context;
 namespace TicketEase.Persistence.Repositories
 {
 
-    public class UnitOfWork : IUnitOfWork
+	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly TicketEaseDbContext _ticketEaseDbContext;
 		public UnitOfWork(TicketEaseDbContext ticketEaseDbContext)
@@ -37,11 +37,11 @@ namespace TicketEase.Persistence.Repositories
 			_ticketEaseDbContext.Dispose();
 		}
 
-        public int SaveChanges()
-        {
-            return _ticketEaseDbContext.SaveChanges();
-        }
-    }
+		public int SaveChanges()
+		{
+			return _ticketEaseDbContext.SaveChanges();
+		}
+	}
 
 }
 

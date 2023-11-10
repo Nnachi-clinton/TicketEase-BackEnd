@@ -5,6 +5,7 @@ using TicketEase.Configurations;
 using TicketEase.Domain.Entities;
 using TicketEase.Persistence.Context;
 using TicketEase.Persistence.Extensions;
+using TicketEase.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
