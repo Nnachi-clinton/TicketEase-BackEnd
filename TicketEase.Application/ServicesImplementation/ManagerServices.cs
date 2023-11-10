@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using TicketEase.Application.DTO;
 using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Application.Interfaces.Services;
@@ -15,11 +16,13 @@ namespace TicketEase.Application.ServicesImplementation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<ManagerServices> _logger;
-        public ManagerServices(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ManagerServices> logger)
+         private readonly IEmailServices _emailServices;
+        public ManagerServices(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ManagerServices> logger,IEmailServices emailServices)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+          _emailServices = emailServices;
         }
         public Task<ApiResponse<EditManagerDto>> EditManager(string userId, EditManagerDto editManagerDto)
         {
@@ -97,6 +100,61 @@ namespace TicketEase.Application.ServicesImplementation
                 _logger.LogError(ex, "Error occurred while retrieving a Manager");
                 return ApiResponse<EditManagerDto>.Failed(new List<string> { "Error: " + ex.Message });
             }
-        }       
+        }
+
+
+        public async Task<ApiResponse<bool>> SendManagerInformationToAdminAsync(ManagerInfoCreateDto managerInfoCreateDto)
+        {
+            try
+            {
+                managerInfoCreateDto.AdminEmail = "ilodibeonyedikachisom@gmail.com";
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = managerInfoCreateDto.AdminEmail,
+                    Subject = "Manager Information",
+                    Body = $"Business Email: {managerInfoCreateDto.BusinessEmail}\n" +
+                           $"Company Name: {managerInfoCreateDto.CompanyName}\n" +
+                           $"Reason to Onboard: {managerInfoCreateDto.ReasonToOnboard}"
+
+                };
+
+                await _emailServices.SendHtmlEmailAsync(mailRequest);
+                return ApiResponse<bool>.Success(true, "Manager information sent to admin successfully", 200);
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error(ex, "An error occurred while sending manager information to admin");
+                return ApiResponse<bool>.Failed(new List<string> { "Error: " + ex.Message });
+            }
+        }
+
+
+        public async Task<ApiResponse<bool>> UpdateManagerProfileAsync(string managerId, UpdateManagerDto updateManagerDto)
+        {
+            try
+            {                
+                var manager = _unitOfWork.ManagerRepository.GetManagerById(managerId);
+
+                if (manager == null)
+                {
+                    return ApiResponse<bool>.Failed(false, "Manager not found.", 404, new List<string> { "Manager not found." });
+                }
+                
+                _mapper.Map(updateManagerDto, manager);              
+                _unitOfWork.ManagerRepository.UpdateManager(manager);
+               
+                _unitOfWork.SaveChanges();
+
+                return ApiResponse<bool>.Success(true, "Manager profile updated successfully.", 200);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while updating the manager profile. ManagerID: {ManagerId}", managerId);
+
+                return ApiResponse<bool>.Failed(false, "An error occurred while updating the manager profile.", 500, new List<string> { ex.Message });
+            }
+        }
+
     }
 }
