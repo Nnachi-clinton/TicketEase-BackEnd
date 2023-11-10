@@ -41,6 +41,11 @@ namespace TicketEase.Persistence.Repositories
 			_ticketEaseDbContext.Dispose();
 		}
 
-		
+        public int SaveChanges()
+        {
+            return _ticketEaseDbContext.SaveChanges();
+        }
+    }
+
 	}
 }
