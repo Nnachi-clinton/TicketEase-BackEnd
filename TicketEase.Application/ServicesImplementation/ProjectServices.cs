@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TicketEase.Application.DTO.Project;
 using TicketEase.Application.Interfaces.Repositories;
@@ -130,7 +131,6 @@ namespace TicketEase.Application.ServicesImplementation
                 var projects = _unitOfWork.ProjectRepository.GetAll();
 
                 var boardProjects = projects.Where(project => project.BoardId == boardId).ToList();
-
                 var paginationResponse = await Pagination<Project>.GetPager(boardProjects, perPage, page, p => p.Title, p => p.Id);
 
                 return ApiResponse<PageResult<IEnumerable<Project>>>.Success(paginationResponse, "Successfully retrieved Projects", 200 );
@@ -140,6 +140,23 @@ namespace TicketEase.Application.ServicesImplementation
                 _logger.LogError(ex, "Error occurred while loading the project");
 
                 return ApiResponse<PageResult<IEnumerable<Project>>>.Failed(false, "Error occured whiile loading projects", 500, new List<string> {ex.Message});
+            }
+        }
+        public ApiResponse<string> DeleteAllProjects()
+        {
+            ApiResponse<string> response;
+            try
+            {
+                List<Project> projects = _unitOfWork.ProjectRepository.GetProjects();
+                _unitOfWork.ProjectRepository.DeleteAllProjects(projects);
+                response = new ApiResponse<string>("All Projects deleted successfully");
+                _unitOfWork.SaveChanges();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = new ApiResponse<string>(false, StatusCodes.Status400BadRequest, "failed" + ex.InnerException);
+                return response;
             }
         }
     }

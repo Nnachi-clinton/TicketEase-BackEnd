@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TicketEase.Application.DTO;
 using TicketEase.Application.Interfaces.Repositories;
@@ -137,56 +138,22 @@ namespace TicketEase.Application.ServicesImplementation
             }
         }
 
-
-        //public Task<ApiResponse<BoardResponseDto>> UpdateBoardAsync(string boardId, BoardRequestDto boardRequestDto)
-        //{
-        //    //ApiResponse<BoardResponseDto> response;
-        //    try
-        //    {
-        //        var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
-        //        if (existingBoard == null)
-        //            return new ApiResponse<BoardResponseDto>(false, 400, $"Board not found.");
-
-        //        var board = _mapper.Map(boardRequestDto, existingBoard);
-        //        _unitOfWork.BoardRepository.UpdateBoard(existingBoard);
-        //        _unitOfWork.SaveChanges();
-
-        //        var responseDto = _mapper.Map<BoardResponseDto>(board);
-        //        return new ApiResponse<BoardResponseDto>(true, $"Successfully updated  board", 200, responseDto, new List<string>());
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        _logger.LogError(ex, "Error occurred while adding a board");
-        //        var errorList = new List<string>();
-        //        errorList.Add(ex.Message);
-        //        return new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
-        //    }
-        //}
-        //public async Task<ApiResponse<BoardResponseDto>> UpdateBoardAsync(string boardId, BoardRequestDto boardRequestDto)
-        //{
-        //    //ApiResponse<BoardResponseDto> response;
-        //    try
-        //    {
-        //        var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
-        //        if (existingBoard == null)
-        //            return new ApiResponse<BoardResponseDto>(false, 400, $"Board not found.");
-
-        //        var board = _mapper.Map(boardRequestDto, existingBoard);
-        //        _unitOfWork.BoardRepository.UpdateBoard(existingBoard);
-        //        _unitOfWork.SaveChanges();
-
-        //        var responseDto = _mapper.Map<BoardResponseDto>(board);
-        //        return new ApiResponse<BoardResponseDto>(true, $"Successfully updated  board", 200, responseDto, new List<string>());
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        _logger.LogError(ex, "Error occurred while adding a board");
-        //        var errorList = new List<string>();
-        //        errorList.Add(ex.Message);
-        //        return new ApiResponse<BoardResponseDto>(true, "Error occurred while adding a board", 500, null, errorList);
-        //    }
-        //}
+        public ApiResponse<BoardResponseDto> DeleteAllBoards()
+        {
+            ApiResponse<BoardResponseDto> response;
+            try
+            {
+                List<Board> boards = _unitOfWork.BoardRepository.GetBoards();
+                _unitOfWork.BoardRepository.DeleteAllBoards(boards);
+                response = new ApiResponse<BoardResponseDto>(true, StatusCodes.Status200OK, "All Boards deleted successfully");
+                _unitOfWork.SaveChanges();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = new ApiResponse<BoardResponseDto>(false, StatusCodes.Status400BadRequest, "failed" + ex.InnerException);
+                return response;
+            }
+        }
     }
 }

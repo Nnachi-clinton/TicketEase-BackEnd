@@ -29,5 +29,10 @@ namespace TicketEase.Persistence.Repositories
 			return GetById(id);
 		}
 		public void UpdateBoard(Board board) => Update(board);
-	}
+
+        public void DeleteAllBoards(List<Board> boards)
+        {
+            DeleteAll(boards);
+        }
+    }
 }
