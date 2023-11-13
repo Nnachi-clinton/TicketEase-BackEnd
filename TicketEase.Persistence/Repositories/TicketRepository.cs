@@ -1,11 +1,13 @@
 ﻿using System.Linq.Expressions;
 using TicketEase.Application.Interfaces.Repositories;
+using TicketEase.Common.Utilities;
 using TicketEase.Domain.Entities;
+using TicketEase.Domain.Enums;
 using TicketEase.Persistence.Context;
 
 namespace TicketEase.Persistence.Repositories
 {
-	public class TicketRepository : GenericRepository<Ticket>, ITicketRepository
+    public class TicketRepository : GenericRepository<Ticket>, ITicketRepository
 	{
 		public TicketRepository(TicketEaseDbContext ticketEaseDbContext) : base(ticketEaseDbContext) { }
 
@@ -38,6 +40,26 @@ namespace TicketEase.Persistence.Repositories
 			return GetAll();
 		}
 
-		public void UpdateTicket(Ticket ticket) => Update(ticket);
-	}
+        public void UpdateTicket(Ticket ticket)
+		{
+			Update(ticket);
+		}
+
+        public async Task<PageResult<IEnumerable<Ticket>>> GetTicketsByStatusWithPagination(Status status, int page, int pageSize)
+        {
+            var tickets = _ticketEaseDbContext.Set<Ticket>()
+                .Where(ticket => ticket.Status == status)
+                .OrderBy(ticket => ticket.TicketReference) 
+                .ThenBy(ticket => ticket.Id)  
+                .ToList();
+
+            return await Pagination<Ticket>.GetPager(
+                tickets,
+                pageSize,
+                page,
+                ticket => ticket.TicketReference, 
+                ticket => ticket.Id    
+            );
+        }
+    }
 }
