@@ -155,5 +155,26 @@ namespace TicketEase.Application.ServicesImplementation
                 return response;
             }
         }
+
+        public Task<ApiResponse<BoardResponseDto>> DeleteBoardAsync(string boardId)
+        {
+            try
+            {
+                var existingBoard = _unitOfWork.BoardRepository.GetBoardById(boardId);
+                if (existingBoard == null)
+                {
+                    return Task.FromResult(new ApiResponse<BoardResponseDto>(false, 404, $"Board not found."));
+
+                }
+                _unitOfWork.BoardRepository.Delete(existingBoard);
+                _unitOfWork.SaveChanges();
+                return Task.FromResult(new ApiResponse<BoardResponseDto>(true, 200, $"Board deleted successfully ."));
+            }
+            catch (Exception)
+            {
+
+                return Task.FromResult(new ApiResponse<BoardResponseDto>(false, 500, $"An error occured during this process."));
+            }
+        }
     }
 }

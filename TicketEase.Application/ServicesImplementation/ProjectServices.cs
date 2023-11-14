@@ -159,5 +159,26 @@ namespace TicketEase.Application.ServicesImplementation
                 return response;
             }
         }
+
+        public Task<ApiResponse<ProjectReponseDto>> DeleteProjectAsync(string projectId)
+        {
+            try
+            {
+                var existingproject = _unitOfWork.ProjectRepository.GetProjectById(projectId);
+                if (existingproject == null)
+                {
+                    return Task.FromResult(new ApiResponse<ProjectReponseDto>(false, 404, $"Project not found."));
+
+                }
+                _unitOfWork.ProjectRepository.Delete(existingproject);
+                _unitOfWork.SaveChanges();
+                return Task.FromResult(new ApiResponse<ProjectReponseDto>(true, 200, $"Project deleted successfully ."));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while while attempting to delete a project");
+                return Task.FromResult(new ApiResponse<ProjectReponseDto>(false, 500, $"An error occured during this process."));
+            }
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace TicketEase.Application.Interfaces.Services
         Task<ApiResponse<GetBoardsDto>> GetAllBoardsAsync(int PerPage, int Page);
         Task<ApiResponse<BoardResponseDto>> GetBoardByIdAsync(string id);
         ApiResponse<BoardResponseDto> DeleteAllBoards();
+        Task<ApiResponse<BoardResponseDto>> DeleteBoardAsync(string boardId);
     }
 }

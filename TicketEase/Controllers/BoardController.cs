@@ -63,6 +63,11 @@ namespace TicketEase.Controllers
         {
             return Ok(_boardServices.DeleteAllBoards());
         }
-            
+
+        [HttpDelete("DeleteBoardById")]
+        public async Task<IActionResult> DeleteBoardById(string boardId)
+        {
+            return Ok(await _boardServices.DeleteBoardAsync(boardId));
+        }
     }
 }

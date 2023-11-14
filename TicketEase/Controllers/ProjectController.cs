@@ -40,5 +40,11 @@ namespace TicketEase.Controllers
         {
             return Ok(_projectServices.DeleteAllProjects());
         }
+
+        [HttpDelete("DeleteProjectById")]
+        public async Task<IActionResult> DeleteProjectById(string id)
+        {
+            return Ok(await _projectServices.DeleteProjectAsync(id));
+        }
     }
 }
