@@ -49,9 +49,9 @@ builder.Services.AddSwaggerGen();
 //options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
 builder.Services.AddSwagger();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
-builder.Services.AddIdentity<AppUser, IdentityRole>()
-               .AddEntityFrameworkStores<TicketEaseDbContext>()
-               .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<AppUser, IdentityRole>()
+//               .AddEntityFrameworkStores<TicketEaseDbContext>()
+//               .AddDefaultTokenProviders();
 
 
 var app = builder.Build();
@@ -71,6 +71,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

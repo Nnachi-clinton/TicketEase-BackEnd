@@ -37,7 +37,7 @@ namespace TicketEase.Persistence.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailServices, EmailServices>();
             services.AddDbContext<TicketEaseDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("TicketConnectionString")));
+            options.UseSqlServer(config.GetConnectionString("TicketEase")));
             services.AddScoped<IManagerServices, ManagerServices>();
         }
     }
