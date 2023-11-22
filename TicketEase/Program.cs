@@ -45,6 +45,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 //builder.Services.AddDbContext<TicketEaseDbContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
 builder.Services.AddSwagger();
@@ -69,6 +70,9 @@ using (var scope = app.Services.CreateScope())
     var serviceprovider = scope.ServiceProvider;
     Seeder.SeedRolesAndSuperAdmin(serviceprovider);
 }
+
+app.UseCors(p => p.WithOrigins("http://localhost:3000")
+    .AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 

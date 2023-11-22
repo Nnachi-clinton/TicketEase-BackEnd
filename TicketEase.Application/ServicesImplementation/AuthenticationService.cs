@@ -36,12 +36,17 @@ namespace TicketEase.Application.ServicesImplementation
                 }
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                var resetPasswordUrl = "https://localhost:7068/reset-password?email=" + Uri.EscapeDataString(email) + "&token=" + Uri.EscapeDataString(token);
+                user.PasswordResetToken = token;
+                user.ResetTokenExpires = DateTime.UtcNow.AddHours(24);
+
+                await _userManager.UpdateAsync(user);
+
+                var resetPasswordUrl = "http://localhost:3000/reset-password?email=" + Uri.EscapeDataString(email) + "&token=" + Uri.EscapeDataString(token);
 
                 var mailRequest = new MailRequest
                 {
                     ToEmail = email,
-                    Subject = "Password Reset Instructions",
+                    Subject = "TicketEase Password Reset Instructions",
                     Body = $"Please reset your password by clicking <a href='{resetPasswordUrl}'>here</a>."
                 };
                 await _emailServices.SendHtmlEmailAsync(mailRequest);
@@ -71,6 +76,11 @@ namespace TicketEase.Application.ServicesImplementation
 
                 if (result.Succeeded)
                 {
+                    user.PasswordResetToken = null;
+                    user.ResetTokenExpires = null;
+
+                    await _userManager.UpdateAsync(user);
+
                     return new ApiResponse<string>(true, "Password reset successful.", 200, null, new List<string>());
                 }
                 else
