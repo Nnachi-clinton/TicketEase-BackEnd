@@ -2,12 +2,8 @@
 {
     public static class Pagination<T>
     {
-        public static async Task<PageResult<IEnumerable<T>>> GetPager(
-            IEnumerable<T> data,
-            int PerPage,
-            int Page,
-            Func<T, string> nameSelector,
-            Func<T, string> idSelector)
+        public static async Task<PageResult<IEnumerable<T>>> GetPager( IEnumerable<T> data,
+            int PerPage, int Page,Func<T, string> nameSelector, Func<T, string> idSelector)
         {
             PerPage = PerPage <= 0 ? 10 : PerPage;
             Page = Page <= 0 ? 1 : Page;

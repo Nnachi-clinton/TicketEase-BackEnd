@@ -12,10 +12,8 @@ namespace TicketEase.Domain.Entities
         public Priority Priority { get; set; }
         public DateTime ResolvedAt { get; set; }
         public string AssignedTo { get; set; }
-       
         [ForeignKey("AppUserId")]
         public string AppUserId { get; set; }
-
         [ForeignKey("ProjectId")]
         public string ProjectId { get; set; }
         public ICollection<Comment> Comment { get; set; }

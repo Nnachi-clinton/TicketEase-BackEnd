@@ -60,10 +60,9 @@ namespace TicketEase.Application.ServicesImplementation
                     page,
                     manager => manager.CompanyName,
                     manager => manager.BusinessEmail);
-                var response = new ApiResponse<PageResult<IEnumerable<Manager>>>(
-                    true,
-                    "Operation successful",
-                    StatusCodes.Status200OK,
+
+                var response = new ApiResponse<PageResult<IEnumerable<Manager>>>( true, "Operation successful",StatusCodes.Status200OK,
+                    
                     new PageResult<IEnumerable<Manager>>
                     {
                         Data = pagedManagers.Data.ToList(),
@@ -72,6 +71,7 @@ namespace TicketEase.Application.ServicesImplementation
                         PerPage = perPage,
                         TotalCount = pagedManagers.TotalCount
                     },
+
                     new List<string>());
                 return response;
             }
@@ -131,17 +131,22 @@ namespace TicketEase.Application.ServicesImplementation
         {
             try
             {                
-                var manager = _unitOfWork.ManagerRepository.GetManagerById(managerId);
-
+                var manager =  _unitOfWork.ManagerRepository.GetManagerById(managerId);
                 if (manager == null)
                 {
-                    return ApiResponse<bool>.Failed(false, "Manager not found.", 404, new List<string> { "Manager not found." });
+                    return  ApiResponse<bool>.Failed(false, "Manager not found.", 404, new List<string> { "Manager not found." });
                 }
-                
-                _mapper.Map(updateManagerDto, manager);              
-                _unitOfWork.ManagerRepository.UpdateManager(manager);
+                //var managerr = _mapper.Map<Manager>(updateManagerDto);
+                manager.UpdatedDate = DateTime.UtcNow;
+                manager.BusinessEmail = updateManagerDto.BusinessEmail;
+                manager.State = updateManagerDto.State;
+                manager.BusinessPhone = updateManagerDto.BusinessPhone;
+                manager.CompanyAddress = updateManagerDto.CompanyAddress;
+                manager.CompanyName = updateManagerDto.CompanyName;
+				            
+				 _unitOfWork.ManagerRepository.UpdateManager(manager);
                
-                _unitOfWork.SaveChanges();
+                 _unitOfWork.SaveChanges();
 
                 return ApiResponse<bool>.Success(true, "Manager profile updated successfully.", 200);
             }

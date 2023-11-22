@@ -24,6 +24,10 @@ namespace TicketEase.Controllers
 
         //[Authorize(Roles = "Admin,Manager")]
         [HttpPut("UpdateBoard/{boardId}")]
+		
+        [AllowAnonymous]
+		//[Authorize(Roles = "Admin,Manager")]
+		[HttpPut("UpdateBoard/{boardId}")]
         public async Task<IActionResult> UpdateBoard(string boardId, [FromBody] BoardRequestDto request)
         {
             return Ok(await _boardServices.UpdateBoardAsync(boardId, request));

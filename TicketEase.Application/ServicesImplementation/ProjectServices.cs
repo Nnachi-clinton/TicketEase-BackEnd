@@ -67,21 +67,21 @@ namespace TicketEase.Application.ServicesImplementation
             }
         }
 
-        public async Task<ApiResponse<ProjectReponseDto>> UpdateProjectAsync(string boardId, string projectId, UpdateProjectRequestDto projectUpdate)
+        public async Task<ApiResponse<ProjectReponseDto>> UpdateProjectAsync(/*string boardId, */string projectId, UpdateProjectRequestDto projectUpdate)
         {
             // Check if the board exists
-            var existingBoard =  _unitOfWork.BoardRepository.GetById(boardId);
-            if (existingBoard == null)
-            {
-                return new ApiResponse<ProjectReponseDto>(false, 404, $"Board with ID {boardId} not found.");
+            //var existingBoard =  _unitOfWork.BoardRepository.GetById(boardId);
+            //if (existingBoard == null)
+            //{
+            //    return new ApiResponse<ProjectReponseDto>(false, StatusCodes.Status400BadRequest, $"Board with ID {boardId} not found.");
 
-            }
+            //}
 
             // Check if the project exists
             var existingProject =  _unitOfWork.ProjectRepository.GetById(projectId);
             if (existingProject == null)
             {
-                return new ApiResponse<ProjectReponseDto>(false, 404, $"Board with ID {projectId} not found.");
+                return new ApiResponse<ProjectReponseDto>(false, StatusCodes.Status400BadRequest, $"Board with ID {projectId} not found.");
             }
 
             try
