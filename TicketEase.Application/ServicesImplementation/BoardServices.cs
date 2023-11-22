@@ -33,7 +33,7 @@ namespace TicketEase.Application.ServicesImplementation
                 var existingBoard = _unitOfWork.BoardRepository.FindBoard(b => b.Name == boardRequestDto.Name).FirstOrDefault();
                 if (existingBoard != null)
                 {
-                    response = new ApiResponse<BoardResponseDto>(false, 400, $"Board already exists.");
+                    response = new ApiResponse<BoardResponseDto>(false, StatusCodes.Status400BadRequest, $"Board already exists.");
                     return response;
                 }
 
