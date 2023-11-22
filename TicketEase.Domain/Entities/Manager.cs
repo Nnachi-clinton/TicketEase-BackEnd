@@ -12,11 +12,8 @@ namespace TicketEase.Domain.Entities
         public string BusinessPhone { get; set; }
         public string CompanyAddress { get; set; }
         public string State { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
-		public string ImageUrl { get; set; }
-     //   public ICollection<Manager> Managers { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public ICollection<AppUser> Users { get; set; }
-        public ICollection<Board> Boards { get; set; }
     }
 }

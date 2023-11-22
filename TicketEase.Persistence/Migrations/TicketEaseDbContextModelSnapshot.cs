@@ -282,9 +282,6 @@ namespace TicketEase.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -296,8 +293,6 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId");
-
                     b.ToTable("Boards");
                 });
 
@@ -305,9 +300,6 @@ namespace TicketEase.Persistence.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comments")
@@ -329,8 +321,6 @@ namespace TicketEase.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("TicketId");
 
@@ -356,9 +346,6 @@ namespace TicketEase.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -554,19 +541,8 @@ namespace TicketEase.Persistence.Migrations
                         .HasForeignKey("ManagerId");
                 });
 
-            modelBuilder.Entity("TicketEase.Domain.Entities.Board", b =>
-                {
-                    b.HasOne("TicketEase.Domain.Entities.Manager", null)
-                        .WithMany("Boards")
-                        .HasForeignKey("ManagerId");
-                });
-
             modelBuilder.Entity("TicketEase.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("TicketEase.Domain.Entities.AppUser", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("TicketEase.Domain.Entities.Ticket", null)
                         .WithMany("Comment")
                         .HasForeignKey("TicketId");
@@ -592,8 +568,6 @@ namespace TicketEase.Persistence.Migrations
 
             modelBuilder.Entity("TicketEase.Domain.Entities.AppUser", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Tickets");
                 });
 
@@ -604,8 +578,6 @@ namespace TicketEase.Persistence.Migrations
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Manager", b =>
                 {
-                    b.Navigation("Boards");
-
                     b.Navigation("Users");
                 });
 

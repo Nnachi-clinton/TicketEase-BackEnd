@@ -8,7 +8,6 @@ namespace TicketEase.Application.DTO
 {
     public class UpdateManagerDto
     {
-        public string Id { get; set; }
         public string CompanyName { get; set; }
         public string BusinessEmail { get; set; }
         public string BusinessPhone { get; set; }

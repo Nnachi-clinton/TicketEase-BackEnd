@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TicketEase.Application.DTO;
 using TicketEase.Application.Interfaces.Repositories;
@@ -67,7 +66,7 @@ namespace TicketEase.Application.ServicesImplementation
                 _unitOfWork.SaveChanges();
 
                 var responseDto = _mapper.Map<TicketResponseDto>(existingTicket);
-                response = new ApiResponse<TicketResponseDto>(true, $"Ticket updated successfully", StatusCodes.Status200OK, responseDto, new List<string>());
+                response = new ApiResponse<TicketResponseDto>(true, $"Ticket updated successfully", 200, responseDto, new List<string>());
                 return response;
             }
             catch (Exception ex)
@@ -88,7 +87,7 @@ namespace TicketEase.Application.ServicesImplementation
 
 
 			//return pagedTickets;
-			return new ApiResponse<PageResult<IEnumerable<Ticket>>>(true, "Operation succesful", StatusCodes.Status200OK, pagedTickets, new List<string>());
+			return new ApiResponse<PageResult<IEnumerable<Ticket>>>(true, "Operation succesful", 200, null, new List<string>());
 		}
 
 		public async Task<ApiResponse<PageResult<IEnumerable<Ticket>>>> GetTicketByUserId(string userId, int page, int perPage)
@@ -103,7 +102,7 @@ namespace TicketEase.Application.ServicesImplementation
 				ticket => ticket.Title,
 				ticket => ticket.Id.ToString());
 
-			return new ApiResponse<PageResult<IEnumerable<Ticket>>> (true, "Operation succesful", 200, pagedTickets, new List<string>());
+			return new ApiResponse<PageResult<IEnumerable<Ticket>>> (true, "Operation succesful", 200, null, new List<string>());
 			//{
 			//	Status = "Success",
 			//	Data = pagedTickets

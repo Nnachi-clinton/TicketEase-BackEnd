@@ -24,10 +24,9 @@ namespace TicketEase.Domain.Entities
         public DateTime? ResetTokenExpires { get; set; }
         public DateTime? VerifiedAt { get; set; }
 
+
         [DefaultValue(true)]
         public bool IsActive { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
-
-        public ICollection<Comment> Comments { get; set; }
     }
 }
