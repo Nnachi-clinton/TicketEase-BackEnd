@@ -15,19 +15,18 @@ namespace TicketEase.Domain.Entities
         public string State { get; set; }
         public string Gender { get; set; }
         public string CloudinaryPublicId { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = new DateTime();
         public string ImageUrl { get; set; }
-
         public string VerificationToken { get; set; }
         public string PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
         public DateTime? VerifiedAt { get; set; }
+        public Manager Manager { get; set; }
 
         [DefaultValue(true)]
         public bool IsActive { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
-
         public ICollection<Comment> Comments { get; set; }
     }
 }

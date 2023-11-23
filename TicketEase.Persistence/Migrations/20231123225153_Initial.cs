@@ -32,10 +32,11 @@ namespace TicketEase.Persistence.Migrations
                     BusinessEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BusinessPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

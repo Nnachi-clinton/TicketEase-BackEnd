@@ -24,8 +24,5 @@ namespace TicketEase.Persistence.Repositories
 		public T GetById(string id)=>_ticketEaseDbContext.Set<T>().Find(id);
 
 		public void Update(T entity)=>_ticketEaseDbContext.Set<T>().Update(entity);
-
-
-		// Task UpdateEntityAsync<T>(T entity) where T : class;
 	}
 }

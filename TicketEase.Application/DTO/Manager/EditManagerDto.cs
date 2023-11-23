@@ -1,4 +1,4 @@
-﻿namespace TicketEase.Application.DTO
+﻿namespace TicketEase.Application.DTO.Manager
 {
     public class EditManagerDto
     {

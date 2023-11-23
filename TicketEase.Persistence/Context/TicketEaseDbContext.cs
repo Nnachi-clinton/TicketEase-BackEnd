@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TicketEase.Domain.Entities;
 
@@ -6,11 +7,7 @@ namespace TicketEase.Persistence.Context
 {
 	public class TicketEaseDbContext : IdentityDbContext<AppUser>
 	{
-		public TicketEaseDbContext(DbContextOptions<TicketEaseDbContext> options)
-			: base(options)
-		{
-
-		}
+		public TicketEaseDbContext(DbContextOptions<TicketEaseDbContext> options):base(options){}
 
 		public DbSet<Board> Boards { get; set; }
 		public DbSet<Comment> Comments { get; set; }
@@ -19,7 +16,17 @@ namespace TicketEase.Persistence.Context
 		public DbSet<Project> Projects { get; set; }
 		public DbSet<Ticket> Tickets { get; set; }
 
+		//protected override void OnModelCreating(ModelBuilder modelBuilder)
+		//{
+		//	base.OnModelCreating(modelBuilder);
 
+		//	// Configure the relationship
+		//	modelBuilder.Entity<AppUser>()
+		//		.HasOne(u => u.Manager)
+		//		.WithMany(o => o.Users)
+		//		.HasForeignKey(u => u.ManagerId)
+		//		.IsRequired(true);
+		//}
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			foreach (var item in ChangeTracker.Entries<BaseEntity>())

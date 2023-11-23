@@ -1,122 +1,283 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using TicketEase.Application.DTO;
+using TicketEase.Application.DTO.Manager;
+using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Application.Interfaces.Services;
+using TicketEase.Common.Utilities;
 using TicketEase.Domain;
 using TicketEase.Domain.Entities;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace TicketEase.Application.ServicesImplementation
 {
-    public class AuthenticationService : IAuthenticationService
-    {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly EmailServices _emailServices;
-        private readonly EmailSettings _emailSettings;
-        private readonly ILogger _logger;
+	public class AuthenticationService : IAuthenticationService
+	{
+		private readonly UserManager<AppUser> _userManager;
+		private readonly SignInManager<AppUser> _signInManager;
+		private readonly EmailServices _emailServices;
+		private readonly EmailSettings _emailSettings;
+		private readonly ILogger _logger;
+		private readonly IConfiguration _config;
 
-        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IOptions<EmailSettings> emailSettings, ILogger<AuthenticationService> logger)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _emailServices = new EmailServices(emailSettings);
-            _emailSettings = emailSettings.Value;
-            _logger = logger;
-        }
 
-        public async Task<ApiResponse<string>> ForgotPasswordAsync(string email)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(email);
+		public AuthenticationService(IConfiguration config, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IOptions<EmailSettings> emailSettings, ILogger<AuthenticationService> logger)
+		{
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_emailServices = new EmailServices(emailSettings);
+			_emailSettings = emailSettings.Value;
+			_logger = logger;
+			_config = config;
+		}
+		public async Task<ApiResponse<string>> RegisterAsync(AppUserCreateDto appUserCreateDto)
+		{
+			var user = await _userManager.FindByEmailAsync(appUserCreateDto.Email);
+			if (user != null)
+			{
+				return new ApiResponse<string>(false, "User with this email already exist.", StatusCodes.Status400BadRequest, new List<string>());
+			}
+			var appUser = new AppUser()
+			{
+				FirstName = appUserCreateDto.FirstName,
+				LastName = appUserCreateDto.LastName,
+				Email = appUserCreateDto.Email,
+				ManagerId = appUserCreateDto.ManagerId,
+				UserName = appUserCreateDto.Email,
+			};
+			try
+			{
+				var result = await _userManager.CreateAsync(appUser, appUserCreateDto.Password);
+				if (result.Succeeded)
+				{
+					await _userManager.AddToRoleAsync(appUser, "User");
+				}
+				return new ApiResponse<string>(true, StatusCodes.Status201Created, "User registered successfully");
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while adding a manager " + ex.InnerException);
+				var errorList = new List<string>();
+				errorList.Add(ex.Message);
+				return new ApiResponse<string>(true, "Password reset email sent successfully.", 200, null, new List<string>());
+			}
+		}
 
-                if (user == null)
-                {
-                    return new ApiResponse<string>(false, "User not found or email not confirmed.", 404, null, new List<string>());
-                }
-                string token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                user.PasswordResetToken = token;
-                user.ResetTokenExpires = DateTime.UtcNow.AddHours(24);
+		public async Task<ApiResponse<string>> RegisterManagerAsync(AppUserCreateDto appUserCreateDto)
+		{
+			try
+			{
+				var user = await _userManager.FindByEmailAsync(appUserCreateDto.Email);
+				if (user != null)
+				{
+					return new ApiResponse<string>(false, StatusCodes.Status400BadRequest, "Manager with this email already exist.");
+				}
+				var appUser = new AppUser()
+				{
+					Email = appUserCreateDto.Email,
+					NormalizedEmail = appUserCreateDto.Email,
+					ManagerId = appUserCreateDto.ManagerId,
+					UserName = appUserCreateDto.Email,
+				};
+				var result = await _userManager.CreateAsync(appUser, appUserCreateDto.Password);
+				if (result.Succeeded)
+				{
+					await _userManager.AddToRoleAsync(appUser, "Manager");
+				}
+				return new ApiResponse<string>(true, StatusCodes.Status201Created, "Manager registered successfully.");
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while adding a manager " + ex.InnerException);
+				return new ApiResponse<string>(false, "Error occurred while creating manager.", StatusCodes.Status500InternalServerError, new List<string> { ex.Message });
+			}
+		}
 
-                await _userManager.UpdateAsync(user);
+		public async Task<ApiResponse<string>> LoginAsync(AppUserLoginDto loginDTO)
+		{
+			try
+			{
+				var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+				if (user == null)
+				{
+					return new ApiResponse<string>(false, StatusCodes.Status404NotFound, "User not found.");
+				}
+				var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, lockoutOnFailure: false);
 
-                var resetPasswordUrl = "http://localhost:3000/reset-password?email=" + Uri.EscapeDataString(email) + "&token=" + Uri.EscapeDataString(token);
+				switch (result)
+				{
+					case { Succeeded: true }:
+						var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+						return new ApiResponse<string>(true, StatusCodes.Status200OK, GenerateJwtToken(user, role));
 
-                var mailRequest = new MailRequest
-                {
-                    ToEmail = email,
-                    Subject = "TicketEase Password Reset Instructions",
-                    Body = $"Please reset your password by clicking <a href='{resetPasswordUrl}'>here</a>."
-                };
-                await _emailServices.SendHtmlEmailAsync(mailRequest);
+					case { IsLockedOut: true }:
+						return new ApiResponse<string>(false, StatusCodes.Status403Forbidden, $"Account is locked out. Please try again later or contact support." +
+							$" You can unlock your account after {_userManager.Options.Lockout.DefaultLockoutTimeSpan.TotalMinutes} minutes.");
 
-                return new ApiResponse<string>(true, "Password reset email sent successfully.", 200, null, new List<string>());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while resolving password change");
-                var errorList = new List<string>();
-                errorList.Add(ex.Message);
-                return new ApiResponse<string>(true, "Error occurred while resolving password change", 500, null, errorList);
-            }
-        }
+					case { RequiresTwoFactor: true }:
+						return new ApiResponse<string>(false, StatusCodes.Status401Unauthorized, "Two-factor authentication is required.");
 
-        public async Task<ApiResponse<string>> ResetPasswordAsync(string email, string token, string newPassword)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(email);
+					case { IsNotAllowed: true }:
+						return new ApiResponse<string>(false, StatusCodes.Status401Unauthorized, "Login failed. Email confirmation is required.");
 
-                if (user == null)
-                {
-                    return new ApiResponse<string>(false, "User not found.", 404, null, new List<string>());
-                }
-                var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+					default:
+						return new ApiResponse<string>(false, StatusCodes.Status401Unauthorized, "Login failed. Invalid email or password.");
+				}
+			}
+			catch (Exception ex)
+			{
+				return new ApiResponse<string>(false, StatusCodes.Status500InternalServerError, "Some error occurred while loggin in." + ex.InnerException);
+			}
+		}
 
-                if (result.Succeeded)
-                {
-                    user.PasswordResetToken = null;
-                    user.ResetTokenExpires = null;
+		public async Task<ApiResponse<string>> ConfirmEmailAsync(string email, string token)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
 
-                    await _userManager.UpdateAsync(user);
+			if (user == null)
+			{
+				return new ApiResponse<string>(false, StatusCodes.Status404NotFound, "User not found.");
+			}
 
-                    return new ApiResponse<string>(true, "Password reset successful.", 200, null, new List<string>());
-                }
-                else
-                {
-                    return new ApiResponse<string>(false, "Password reset failed.", 400, null, result.Errors.Select(error => error.Description).ToList());
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while resetting password");
-                var errorList = new List<string> { ex.Message };
-                return new ApiResponse<string>(true, "Error occurred while resetting password", 500, null, errorList);
-            }           
-        }
+			var result = await _userManager.ConfirmEmailAsync(user, token);
 
-        public async Task<ApiResponse<string>> ChangePasswordAsync(AppUser user, string currentPassword, string newPassword)
-        {
-            try
-            {
-                var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+			if (result.Succeeded)
+			{
+				return new ApiResponse<string>(true, StatusCodes.Status200OK, "Email confirmation successful.");
+			}
 
-                if (result.Succeeded)
-                {
-                    return new ApiResponse<string>(true, "Password changed successfully.", 200, null, new List<string>());
-                }
-                else
-                {
-                    return new ApiResponse<string>(false, "Password change failed.", 400, null, result.Errors.Select(error => error.Description).ToList());
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while changing password");
-                var errorList = new List<string> { ex.Message };
-                return new ApiResponse<string>(true, "Error occurred while changing password", 500, null, errorList);
-            }
-        }
-    }
+			// Handle confirmation failure
+			return new ApiResponse<string>(false, StatusCodes.Status400BadRequest, "Email confirmation failed.");
+		}
+
+
+		private string GenerateJwtToken(AppUser contact, string roles)
+		{
+			var jwtSettings = _config.GetSection("JwtSettings:Secret").Value;
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings));
+			var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+			var claims = new[]
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, contact.UserName),
+				new Claim(JwtRegisteredClaimNames.Email, contact.Email),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim(ClaimTypes.Role, roles)
+			};
+
+			var token = new JwtSecurityToken(
+				issuer: null,
+				audience: null,
+				claims: claims,
+				expires: DateTime.UtcNow.AddMinutes(int.Parse(_config.GetSection("JwtSettings:AccessTokenExpiration").Value)),
+				signingCredentials: credentials
+			);
+
+			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
+
+		public async Task<ApiResponse<string>> ForgotPasswordAsync(string email)
+		{
+			try
+			{
+				var user = await _userManager.FindByEmailAsync(email);
+
+				if (user == null)
+				{
+					return new ApiResponse<string>(false, "User not found or email not confirmed.", StatusCodes.Status404NotFound, null, new List<string>());
+				}
+				string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+				user.PasswordResetToken = token;
+				user.ResetTokenExpires = DateTime.UtcNow.AddHours(24);
+
+				await _userManager.UpdateAsync(user);
+
+				var resetPasswordUrl = "http://localhost:3000/reset-password?email=" + Uri.EscapeDataString(email) + "&token=" + Uri.EscapeDataString(token);
+
+				var mailRequest = new MailRequest
+				{
+					ToEmail = email,
+					Subject = "TicketEase Password Reset Instructions",
+					Body = $"Please reset your password by clicking <a href='{resetPasswordUrl}'>here</a>."
+				};
+				await _emailServices.SendHtmlEmailAsync(mailRequest);
+
+				return new ApiResponse<string>(true, "Password reset email sent successfully.", 200, null, new List<string>());
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while resolving password change");
+				var errorList = new List<string>();
+				errorList.Add(ex.Message);
+				return new ApiResponse<string>(true, "Error occurred while resolving password change", 500, null, errorList);
+			}
+		}
+
+		public async Task<ApiResponse<string>> ResetPasswordAsync(string email, string token, string newPassword)
+		{
+			try
+			{
+				var user = await _userManager.FindByEmailAsync(email);
+
+				if (user == null)
+				{
+					return new ApiResponse<string>(false, "User not found.", 404, null, new List<string>());
+				}
+				var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+				if (result.Succeeded)
+				{
+					user.PasswordResetToken = null;
+					user.ResetTokenExpires = null;
+
+					await _userManager.UpdateAsync(user);
+
+					return new ApiResponse<string>(true, "Password reset successful.", 200, null, new List<string>());
+				}
+				else
+				{
+					return new ApiResponse<string>(false, "Password reset failed.", 400, null, result.Errors.Select(error => error.Description).ToList());
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while resetting password");
+				var errorList = new List<string> { ex.Message };
+				return new ApiResponse<string>(true, "Error occurred while resetting password", 500, null, errorList);
+			}
+		}
+
+		public async Task<ApiResponse<string>> ChangePasswordAsync(AppUser user, string currentPassword, string newPassword)
+		{
+			try
+			{
+				var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+				if (result.Succeeded)
+				{
+					return new ApiResponse<string>(true, "Password changed successfully.", 200, null, new List<string>());
+				}
+				else
+				{
+					return new ApiResponse<string>(false, "Password change failed.", 400, null, result.Errors.Select(error => error.Description).ToList());
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while changing password");
+				var errorList = new List<string> { ex.Message };
+				return new ApiResponse<string>(true, "Error occurred while changing password", 500, null, errorList);
+			}
+		}
+	}
 }

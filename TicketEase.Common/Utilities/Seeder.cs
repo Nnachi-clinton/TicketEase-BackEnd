@@ -10,7 +10,7 @@ namespace TicketEase.Common.Utilities
 		public static void SeedRolesAndSuperAdmin(IServiceProvider serviceProvider)
 		{
 			var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-			var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+			var managerManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
 			// Seed roles
 			if (!roleManager.RoleExistsAsync("SuperAdmin").Result)
@@ -23,8 +23,8 @@ namespace TicketEase.Common.Utilities
 			{
 				var role = new IdentityRole("Manager");
 				roleManager.CreateAsync(role).Wait();
-			}
 
+			}
 			if (!roleManager.RoleExistsAsync("User").Result)
 			{
 				var role = new IdentityRole("User");
@@ -32,26 +32,25 @@ namespace TicketEase.Common.Utilities
 			}
 
 			// Seed users with roles
-			if (userManager.FindByNameAsync("Admin").Result == null)
-			{
-				var user = new AppUser
-				{
-					UserName = "Admin",
-					Email = "admin@ticketease.com",
-					EmailConfirmed = true,
-					FirstName = "Admin",
-					IsActive = true,
-					CreatedAt = DateTime.UtcNow
-				};
+			
+			//if (managerManager.FindByNameAsync("Manager").Result == null)
+			//{
+			//	var man = new Manager
+			//	{
+			//		CompanyName = "Decagon Institute",
+			//		BusinessEmail = "manager@ticketease.com",
+			//		//Email = "manager@ticketease.com",
+			//		//EmailConfirmed = true,
+			//		//LockoutEnabled = false,
+			//	};
+			//	var result = managerManager.CreateAsync(man, "Password@123").Result;
+			//	if (result.Succeeded)
+			//	{
+			//		managerManager.AddToRoleAsync(man, "Manager").Wait();
+			//	}
+			//}
 
-				var result = userManager.CreateAsync(user, "Password@123").Result;
 
-				if (result.Succeeded)
-				{
-					userManager.AddToRoleAsync(user, "SuperAdmin").Wait();
-				}
-			}
 		}
-
 	}
 }

@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using TicketEase.Application.DTO;
+using TicketEase.Application.DTO.Manager;
 using TicketEase.Application.Interfaces.Services;
-using TicketEase.Application.ServicesImplementation;
-using TicketEase.Domain;
 
 namespace TicketEase.Controllers
 {
@@ -16,7 +15,15 @@ namespace TicketEase.Controllers
         public ManagerController(IManagerServices managerService)
         {
             _managerService = managerService;
-        }      
+        }
+
+        [HttpPost("AddManager")]
+        public async Task<IActionResult> CreateManager([FromBody] ManagerInfoCreateDto managerInfoCreateDto)
+        {
+            return Ok(await _managerService.CreateManager(managerInfoCreateDto));
+        }
+
+
         [HttpGet("GetById")]
         public IActionResult GetManagersById(string id)
         {

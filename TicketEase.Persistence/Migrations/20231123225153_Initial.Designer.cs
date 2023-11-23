@@ -12,9 +12,7 @@ using TicketEase.Persistence.Context;
 namespace TicketEase.Persistence.Migrations
 {
     [DbContext(typeof(TicketEaseDbContext))]
-
-    [Migration("20231122191923_Initial")]
-
+    [Migration("20231123225153_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -344,6 +342,7 @@ namespace TicketEase.Persistence.Migrations
             modelBuilder.Entity("TicketEase.Domain.Entities.Manager", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BusinessEmail")
@@ -355,13 +354,16 @@ namespace TicketEase.Persistence.Migrations
                     b.Property<string>("CompanyAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
@@ -553,9 +555,11 @@ namespace TicketEase.Persistence.Migrations
 
             modelBuilder.Entity("TicketEase.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("TicketEase.Domain.Entities.Manager", null)
+                    b.HasOne("TicketEase.Domain.Entities.Manager", "Manager")
                         .WithMany("Users")
                         .HasForeignKey("ManagerId");
+
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Board", b =>
