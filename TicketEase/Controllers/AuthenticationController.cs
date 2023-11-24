@@ -1,25 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketEase.Application.DTO;
-using TicketEase.Application.Interfaces.Services;
 using TicketEase.Domain;
 using TicketEase.Domain.Entities;
 
 namespace TicketEase.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class AuthenticationController : ControllerBase
 	{
-		private readonly IAuthenticationService _authenticationService;
-		private readonly UserManager<AppUser> _userManager;
+        private readonly Application.Interfaces.Services.IAuthenticationService _authenticationService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-		public AuthenticationController(IAuthenticationService authenticationService, UserManager<AppUser> userManager)
-		{
-			_authenticationService = authenticationService;
-			_userManager = userManager;
-		}
-		[HttpPost("Register")]
+        public AuthenticationController(Application.Interfaces.Services.IAuthenticationService authenticationService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        {
+            _authenticationService = authenticationService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        [HttpPost("Register")]
 		public async Task<IActionResult> Register([FromBody] AppUserCreateDto appUserCreateDto)
 		{
 			if (!ModelState.IsValid)
@@ -110,5 +113,15 @@ namespace TicketEase.Controllers
 				return BadRequest(new ApiResponse<string>(false, response.Message, response.StatusCode, null, response.Errors));
 			}
 		}
-	}
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            return Ok(new ApiResponse<string>(true, "Logout successful", 200, null, new List<string>()));
+        }
+    }
 }
