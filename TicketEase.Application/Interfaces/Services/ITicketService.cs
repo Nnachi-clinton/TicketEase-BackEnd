@@ -14,5 +14,6 @@ namespace TicketEase.Application.Interfaces.Services
         ApiResponse<TicketResponseDto> EditTicket(string ticketId, UpdateTicketRequestDto updatedTicketDTO);
         Task<ApiResponse<bool>> DeleteTicketByIdAsync(string ticketId);
         Task<PageResult<IEnumerable<Ticket>>> GetTicketsByStatusWithPagination(Status status, int page, int pageSize);
+        Task<ApiResponse<IEnumerable<TicketResponseDto>>> GetAllTickets();
     }
 }

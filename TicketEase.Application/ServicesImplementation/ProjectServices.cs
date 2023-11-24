@@ -66,6 +66,24 @@ namespace TicketEase.Application.ServicesImplementation
 
             }
         }
+        public List<ProjectReponseDto> GetAllProjects()
+        {
+            var projects = _unitOfWork.ProjectRepository.GetAll();
+            List<ProjectReponseDto> list = new();
+
+            foreach (var project in projects)
+            {
+                var presponse = new ProjectReponseDto()
+                {
+                    Description = project.Description,
+                    Id = project.Id,
+                    Title = project.Title,
+                };
+                list.Add(presponse);
+            }
+
+            return list;
+        }
 
         public async Task<ApiResponse<ProjectReponseDto>> UpdateProjectAsync(/*string boardId, */string projectId, UpdateProjectRequestDto projectUpdate)
         {

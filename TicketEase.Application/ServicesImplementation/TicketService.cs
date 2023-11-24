@@ -160,5 +160,21 @@ namespace TicketEase.Application.ServicesImplementation
                 throw;
             }
         }
+        public async Task<ApiResponse<IEnumerable<TicketResponseDto>>> GetAllTickets()
+        {
+            try
+            {
+                var tickets = _unitOfWork.TicketRepository.GetTickets();
+                var ticketDtos = _mapper.Map<IEnumerable<TicketResponseDto>>(tickets);
+
+                return ApiResponse<IEnumerable<TicketResponseDto>>.Success(ticketDtos, "Successfully retrieved all tickets.", 200);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all tickets.");
+
+                return ApiResponse<IEnumerable<TicketResponseDto>>.Failed(new List<string> { "An error occurred while retrieving all tickets." });
+            }
+        }
     }
 }

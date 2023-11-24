@@ -50,8 +50,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
-//builder.Services.AddDbContext<TicketEaseDbContext>(options => 
-//options.UseSqlServer(builder.Configuration.GetConnectionString("TicketConnectionString")));
+
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 

@@ -7,6 +7,7 @@ namespace TicketEase.Application.Interfaces.Services
 {
     public interface IProjectServices
     {
+        List<ProjectReponseDto> GetAllProjects();
         Task<ApiResponse<ProjectReponseDto>> CreateProjectAsync(string boardId, ProjectRequestDto project);
         Task<ApiResponse<ProjectReponseDto>> UpdateProjectAsync(/*string boardId, */string projectId, UpdateProjectRequestDto projectUpdate);
         Task<ApiResponse<Project>> GetProjectByIdAsync(string projectId);
