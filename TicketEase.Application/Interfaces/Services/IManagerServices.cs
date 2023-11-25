@@ -11,7 +11,7 @@ namespace TicketEase.Application.Interfaces.Services
     {
 		string DeactivateManager(string id);
         string ActivateManager(string id);
-        Task<string> CreateManager(ManagerInfoCreateDto managerCreateDto);
+		Task<ApiResponse<ManagerResponseDto>> CreateManager(ManagerInfoCreateDto managerCreateDto);
 		Task<ApiResponse<EditManagerDto>> EditManager(string userId, EditManagerDto managerDto);
         ApiResponse<EditManagerDto> GetManagerById(string userId);
         Task<ApiResponse<PageResult<IEnumerable<Manager>>>> GetAllManagerByPagination(int page, int perPage);

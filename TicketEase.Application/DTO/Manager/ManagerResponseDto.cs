@@ -2,9 +2,13 @@
 {
     public class ManagerResponseDto
     {
+		public string Id { get; set; }
         public string CompanyName { get; set; }
         public string BusinessEmail { get; set; }
-        public string CompanyUsername { get; set; }
-        public string CompanyPassword { get; set; }
+		public string BusinessPhone { get; set; }
+		public string CompanyAddress { get; set; }
+		public string CompanyDescription { get; set; }
+		public string State { get; set; }
+		public string ImgUrl { get; set; }
     }
 }

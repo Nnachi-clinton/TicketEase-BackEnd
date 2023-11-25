@@ -41,17 +41,17 @@ namespace TicketEase.Application.ServicesImplementation
 			_authenticationService = authenticationService;
 		}
 
-		public async Task<string> CreateManager(ManagerInfoCreateDto managerCreateDto)
+		public async Task<ApiResponse<ManagerResponseDto>> CreateManager(ManagerInfoCreateDto managerCreateDto)
 		{
 			var user = _unitOfWork.ManagerRepository.FindManager(x => x.BusinessEmail == managerCreateDto.BusinessEmail);
 			if (user.Count > 0)
 			{
-				return "Manager with this email already exist.";
+				return new ApiResponse<ManagerResponseDto> (false,StatusCodes.Status400BadRequest,"Manager with this email already exist.");
 			}
 
 			string generatedPassword = PasswordGenerator.GeneratePassword(managerCreateDto.BusinessEmail, managerCreateDto.CompanyName);
 			managerCreateDto.Password = generatedPassword;
-			string emailBody = $"Welcome to TicketEase. An account has been created for you with the following details\nEmail{managerCreateDto.BusinessEmail}, \nPassword: {generatedPassword}";
+			string emailBody = $"Welcome to TicketEase. An account has been created for you with the following details<br>Email: {managerCreateDto.BusinessEmail}, <br>Password: {generatedPassword}";
 
 			var manager = new Manager()
 			{
@@ -60,7 +60,7 @@ namespace TicketEase.Application.ServicesImplementation
 				CompanyName = managerCreateDto.CompanyName
 			};
 
-			_unitOfWork.ManagerRepository.Add(manager);
+			_unitOfWork.ManagerRepository.AddManager(manager);
 			_unitOfWork.SaveChanges();
 
 			var userCreateDto = new AppUserCreateDto()
@@ -73,22 +73,30 @@ namespace TicketEase.Application.ServicesImplementation
 			var response = await _authenticationService.RegisterManagerAsync(userCreateDto);
 			if (response.Succeeded)
 			{
-				var email = new MailRequest()
+				try
 				{
-					Subject = "Welcome to TicketEase",
-					ToEmail = managerCreateDto.BusinessEmail,
-					Body = emailBody
-				};
-				await _emailServices.SendHtmlEmailAsync(email);
-				return response.Message;
+					var email = new MailRequest()
+					{
+						Subject = "Welcome to TicketEase",
+						ToEmail = managerCreateDto.BusinessEmail,
+						Body = emailBody
+					};
+					var managerResponse = _mapper.Map<ManagerResponseDto>(manager);
+					await _emailServices.SendHtmlEmailAsync(email);
+					return new ApiResponse<ManagerResponseDto>(true, response.Message, StatusCodes.Status200OK, managerResponse, new List<string>()); 
+				}
+				catch (Exception ex)
+				{
+					return new ApiResponse<ManagerResponseDto>(false, response.Message, StatusCodes.Status500InternalServerError, new List<string>() { ex.InnerException.ToString()});
+				}
 			}
 			else
 			{
 				_unitOfWork.ManagerRepository.Delete(manager);
 				_unitOfWork.SaveChanges();
-				return response.Message;
+				return new ApiResponse<ManagerResponseDto>(false, StatusCodes.Status500InternalServerError, response.Message);
 			}
-			
+
 		}
 
 
@@ -113,7 +121,7 @@ namespace TicketEase.Application.ServicesImplementation
 			{
 				_logger.LogError(ex, "Error occurred while editing a Manager");
 				var errorList = new List<string>();
-				return Task.FromResult(new ApiResponse<EditManagerDto>(true, "Error occurred while adding a Manager", StatusCodes.Status400BadRequest, null, errorList));
+				return Task.FromResult(new ApiResponse<EditManagerDto>(false, "Error occurred while adding a Manager", StatusCodes.Status400BadRequest, null, errorList));
 			}
 		}
 		public async Task<ApiResponse<PageResult<IEnumerable<Manager>>>> GetAllManagerByPagination(int page, int perPage)
@@ -393,7 +401,29 @@ namespace TicketEase.Application.ServicesImplementation
 
 
 		}
+		public ApiResponse<string> ExtractUserIdFromToken(string authToken)
+		{
+			try
+			{
+				var token = authToken.Replace("Bearer ", "");
 
+				var handler = new JwtSecurityTokenHandler();
+				var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+				var userId = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+				if (string.IsNullOrWhiteSpace(userId))
+				{
+					return new ApiResponse<string>(false, "Invalid or expired token.", 401, null, new List<string>());
+				}
+
+				return new ApiResponse<string>(true, "User ID extracted successfully.", 200, userId, new List<string>());
+			}
+			catch (Exception ex)
+			{
+				return new ApiResponse<string>(false, "Error extracting user ID from token.", 500, null, new List<string> { ex.Message });
+			}
+		}
 
 	}
 }

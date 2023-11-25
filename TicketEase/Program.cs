@@ -37,11 +37,6 @@ builder.Services.AddSingleton(provider =>
     return new Cloudinary(cloudinaryAccount);
 });
 
-
-//builder.Services.AddIdentity<AppUser, IdentityRole>()
-//	.AddEntityFrameworkStores<TicketEaseDbContext>()
-//	.AddDefaultTokenProviders();
-
 builder.Services.AddMailService(configuration);
 
 builder.Services.AddControllers();
@@ -71,7 +66,7 @@ using (var scope = app.Services.CreateScope())
     Seeder.SeedRolesAndSuperAdmin(serviceprovider);
 }
 
-app.UseCors(p => p.WithOrigins("http://localhost:3000")
+app.UseCors(p => p.AllowAnyOrigin()
     .AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();

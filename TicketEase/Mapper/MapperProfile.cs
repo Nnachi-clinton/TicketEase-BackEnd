@@ -28,9 +28,11 @@ namespace TicketEase.Mapper
 				.ForMember(man => man.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
 				.ForMember(man => man.BusinessEmail, opt => opt.MapFrom(src => src.BusinessEmail));
 
-			CreateMap<Manager, ManagerResponseDto>()
-				.ForMember(man => man.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
-				.ForMember(man => man.BusinessEmail, opt => opt.MapFrom(src => src.BusinessEmail));
+			//CreateMap<Manager, ManagerResponseDto>()
+			//	.ForMember(man => man.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
+			//	.ForMember(man => man.BusinessEmail, opt => opt.MapFrom(src => src.BusinessEmail));
+
+			CreateMap<Manager, ManagerResponseDto>();
 
 			CreateMap<ProjectRequestDto, Project>()
 			 .ForMember(dest => dest.Id, opt => opt.Ignore())

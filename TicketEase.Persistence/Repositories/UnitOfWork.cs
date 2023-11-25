@@ -41,7 +41,7 @@ namespace TicketEase.Persistence.Repositories
 
         public void Dispose()
         {
-            //_ticketEaseDbContext.Dispose();
+            _ticketEaseDbContext.Dispose();
         }
     }
 
