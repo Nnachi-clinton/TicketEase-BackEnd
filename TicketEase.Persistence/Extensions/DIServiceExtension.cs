@@ -10,33 +10,33 @@ using TicketEase.Persistence.Repositories;
 
 namespace TicketEase.Persistence.Extensions
 {
-    public static class DIServiceExtension
-    {
-        public static void AddDependencies(this IServiceCollection services, IConfiguration config)
-        {
-            //Bind CloudinarySettings from configuration
-            var cloudinarySettings = new CloudinarySetting();
-            config.GetSection("CloudinarySettings").Bind(cloudinarySettings);
-            services.AddSingleton(cloudinarySettings);
-            var emailSettings = new EmailSettings();
-            config.GetSection("EmailSettings").Bind(emailSettings);
-            services.AddSingleton(emailSettings);
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddTransient<ICloudinaryServices, CloudinaryServices>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IProjectServices, ProjectServices>();
-            services.AddScoped<IBoardServices, BoardServices>();
-            services.AddScoped<ITicketService, TicketService>();
-            services.AddScoped<ITicketRepository, TicketRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
-            services.AddScoped<IPaymentRepository, PaymentRepository>();
+	public static class DIServiceExtension
+	{
+		public static void AddDependencies(this IServiceCollection services, IConfiguration config)
+		{
+			//Bind CloudinarySettings from configuration
+			var cloudinarySettings = new CloudinarySetting();
+			config.GetSection("CloudinarySettings").Bind(cloudinarySettings);
+			services.AddSingleton(cloudinarySettings);
+			var emailSettings = new EmailSettings();
+			config.GetSection("EmailSettings").Bind(emailSettings);
+			services.AddSingleton(emailSettings);
+			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddTransient<ICloudinaryServices, CloudinaryServices>();
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
+			services.AddScoped<IProjectServices, ProjectServices>();
+			services.AddScoped<IBoardServices, BoardServices>();
+			services.AddScoped<ITicketService, TicketService>();
+			services.AddScoped<ITicketRepository, TicketRepository>();
+			services.AddScoped<ICommentRepository, CommentRepository>();
+			services.AddScoped<IPaymentRepository, PaymentRepository>();
 			services.AddScoped<IManagerServices, ManagerServices>();
 			services.AddScoped<IUserServices, UserServices>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IEmailServices, EmailServices>();
-            
-            services.AddDbContext<TicketEaseDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
-        }
-    }
+			services.AddScoped<IAuthenticationService, AuthenticationService>();
+			services.AddScoped<IEmailServices, EmailServices>();
+			
+			services.AddDbContext<TicketEaseDbContext>(options =>
+			options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+		}
+	}
 }
