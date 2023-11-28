@@ -39,4 +39,5 @@ namespace TicketEase.Persistence.Extensions
 			options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 		}
 	}
+
 }

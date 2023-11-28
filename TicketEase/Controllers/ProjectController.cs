@@ -16,7 +16,7 @@ namespace TicketEase.Controllers
 			_projectServices = projectServices;
 		}
 
-		[HttpPost("AddProject")]
+		[HttpPost("AddProject/{boardId}")]
 		public async Task<IActionResult> CreateProject(string boardId, [FromBody] ProjectRequestDto project)
 		{
 			return Ok(_projectServices.CreateProjectAsync(boardId, project)); 

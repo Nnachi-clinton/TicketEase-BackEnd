@@ -4,6 +4,8 @@ using Serilog;
 using TicketEase.Application.DTO;
 using TicketEase.Application.DTO.Manager;
 using TicketEase.Application.Interfaces.Services;
+using TicketEase.Application.ServicesImplementation;
+using TicketEase.Domain;
 
 namespace TicketEase.Controllers
 {
@@ -52,11 +54,13 @@ namespace TicketEase.Controllers
                 return Ok(response);            
         }
 
-        [HttpPut("updateManager/{managerId}")]
+        [HttpPut("updateProfile/{managerId}")]
         public async Task<IActionResult> UpdateManagerProfile(string managerId, [FromBody] UpdateManagerDto updateManagerDto)
-        {
+        {           
+
             var result = await _managerService.UpdateManagerProfileAsync(managerId, updateManagerDto);
-            return Ok(result);              
+            return Ok(new ApiResponse<bool>(true, "User updated successfully.", 200, true, null));              
+
            
         }
     }
