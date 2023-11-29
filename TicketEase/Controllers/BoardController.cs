@@ -39,7 +39,7 @@ namespace TicketEase.Controllers
 		}
 
 		[HttpGet("get-all-board-by-pagination")]
-		public async Task<IActionResult> GetAllBoards([FromQuery] int page = 1, [FromQuery] int perPage = 3)
+		public async Task<IActionResult> GetAllBoards([FromQuery] int page, [FromQuery] int perPage)
 		{
 			try
 			{

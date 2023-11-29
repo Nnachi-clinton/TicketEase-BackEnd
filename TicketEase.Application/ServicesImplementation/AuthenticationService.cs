@@ -53,6 +53,7 @@ namespace TicketEase.Application.ServicesImplementation
 				ManagerId = appUserCreateDto.ManagerId,
 				UserName = appUserCreateDto.Email,
 			};
+			
 			try
 			{
 				var result = await _userManager.CreateAsync(appUser, appUserCreateDto.Password);
@@ -66,13 +67,14 @@ namespace TicketEase.Application.ServicesImplementation
 			{
 				_logger.LogError(ex, "Error occurred while adding a manager " + ex.InnerException);
 				var errorList = new List<string>();
-				errorList.Add(ex.Message);
-				return new ApiResponse<string>(true, "Password reset email sent successfully.", 200, null, new List<string>());
+				errorList.Add(ex.InnerException.ToString());
+				return new ApiResponse<string>(false, "Error creating user.", StatusCodes.Status500InternalServerError, null, errorList);
 			}
 		}
 
+       
 
-		public async Task<ApiResponse<string>> RegisterManagerAsync(AppUserCreateDto appUserCreateDto)
+        public async Task<ApiResponse<string>> RegisterManagerAsync(AppUserCreateDto appUserCreateDto)
 		{
 			try
 			{

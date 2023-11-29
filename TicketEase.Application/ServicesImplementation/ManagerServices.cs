@@ -87,7 +87,7 @@ namespace TicketEase.Application.ServicesImplementation
                 }
                 catch (Exception ex)
                 {
-                    return new ApiResponse<ManagerResponseDto>(false, response.Message, StatusCodes.Status500InternalServerError, new List<string>() { ex.InnerException.ToString() });
+                    return new ApiResponse<ManagerResponseDto>(true, response.Message+". Unable to Send Email", StatusCodes.Status500InternalServerError, new List<string>() { ex.InnerException.ToString() });
                 }
             }
             else
@@ -233,7 +233,7 @@ namespace TicketEase.Application.ServicesImplementation
         {
             try
             {
-                managerInfoCreateDto.AdminEmail = "ilodibeonyedikachisom@gmail.com";
+                managerInfoCreateDto.AdminEmail = _config.GetSection("EmailSettings:Email").Value; ;
                 var mailRequest = new MailRequest
                 {
                     ToEmail = managerInfoCreateDto.AdminEmail,

@@ -14,10 +14,18 @@ namespace TicketEase.Persistence.Repositories
 
 		public void DeleteUser(AppUser appUser) => Delete(appUser);
 
-		public List<AppUser> FindUser(Expression<Func<AppUser, bool>> condition)
-		{
-			return Find(condition);
-		}
+        public List<AppUser> FindUser(Expression<Func<AppUser, bool>> condition)
+        {
+            var users = _ticketEaseDbContext.Set<AppUser>().AsQueryable().Where(condition).ToList();
+            var filteredUsers = users.Where(u => u.Id != u.ManagerId).ToList();
+            return filteredUsers;
+        }
+
+
+  //      public List<AppUser> FindUser(Expression<Func<AppUser, bool>> condition)
+		//{
+		//	return Find(condition);
+		//}
 
 		public List<AppUser> GetUser()
 		{

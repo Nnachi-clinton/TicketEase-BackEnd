@@ -120,7 +120,7 @@ namespace TicketEase.Application.ServicesImplementation
                 user.ImageUrl = imageUrl;
 
                 _unitOfWork.UserRepository.Update(user);
-                 _unitOfWork.SaveChanges();
+                _unitOfWork.SaveChanges();
 
                 return imageUrl;
             }
@@ -130,6 +130,32 @@ namespace TicketEase.Application.ServicesImplementation
                 throw;
             }
         }
+
+
+        public async Task<ApiResponse<PageResult<IEnumerable<AppUserDto>>>> GetUsersByManagerIdAsync(string managerId, int page, int perPage)
+        {
+            try
+            {
+                var users = _unitOfWork.UserRepository.FindUser(u => u.ManagerId == managerId).ToList();
+                var filteredUsers = users.Where(u => u.Id != u.ManagerId).ToList();
+                var pagedUsers = await Pagination<AppUser>.GetPager(
+                    filteredUsers,
+                    perPage,
+                    page,
+                    user => user.LastName,
+                    user => user.Id.ToString()
+                );
+                var pagedUserDtos = _mapper.Map<PageResult<IEnumerable<AppUserDto>>>(pagedUsers);
+
+                return ApiResponse<PageResult<IEnumerable<AppUserDto>>>.Success(pagedUserDtos, "Users found.", 200);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while retrieving users by manager ID and pagination. ManagerID: {ManagerId}", managerId);
+                return ApiResponse<PageResult<IEnumerable<AppUserDto>>>.Failed(false, "An error occurred while retrieving users by manager ID and pagination.", 500, new List<string> { ex.Message });
+            }
+        }
+
     }
 }
 

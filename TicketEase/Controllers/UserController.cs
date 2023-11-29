@@ -35,7 +35,7 @@ namespace TicketEase.Controllers
         }
 
         [HttpGet("get-Users-By-Pagination")]
-        public async Task<IActionResult> GetUsersByPagination(int page = 1, int perPage = 3)
+        public async Task<IActionResult> GetUsersByPagination(int page, int perPage)
         {
             var response = await _userServices.GetUsersByPaginationAsync(page, perPage);
 
@@ -86,8 +86,18 @@ namespace TicketEase.Controllers
             }
         }
 
+        [HttpGet("get-Users-By-ManagerId")]
+        public async Task<IActionResult> GetUsersByManagerIdAndPagination(string managerId, int page, int perPage)
+        {
+            var response = await _userServices.GetUsersByManagerIdAsync(managerId, page, perPage);
 
+            if (response.Succeeded)
+            {
+                return Ok(response.Data);
+            }
 
+            return StatusCode(response.StatusCode, new { errors = response.Errors });
+        }
 
     }
 }
