@@ -14,10 +14,10 @@ namespace TicketEase.Application.ServicesImplementation
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ICloudinaryServices _cloudinaryServices;
+        private readonly ICloudinaryServices<AppUser> _cloudinaryServices;
 
         public UserServices(IUnitOfWork unitOfWork, IMapper mapper,
-            ICloudinaryServices cloudinaryServices)
+            ICloudinaryServices<AppUser> cloudinaryServices)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -107,9 +107,11 @@ namespace TicketEase.Application.ServicesImplementation
                 if (file == null || file.Length <= 0)
                     return "Invalid file size";
 
+                // Update other properties using AutoMapper
                 _mapper.Map(model, user);
 
-                var imageUrl = await _cloudinaryServices.UploadContactImage(id, file);
+                // Upload the image to Cloudinary and get the URL
+                var imageUrl = await _cloudinaryServices.UploadImage(id, file);
 
                 if (imageUrl == null)
                 {
@@ -117,9 +119,13 @@ namespace TicketEase.Application.ServicesImplementation
                     return null;
                 }
 
+                // Update the ImageUrl property with the Cloudinary URL
                 user.ImageUrl = imageUrl;
 
+                // Update the user entity in the repository
                 _unitOfWork.UserRepository.Update(user);
+
+                // Save changes to the database
                 _unitOfWork.SaveChanges();
 
                 return imageUrl;

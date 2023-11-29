@@ -30,7 +30,7 @@ builder.Services.AddSingleton(provider =>
 {
     var cloudinarySettings = provider.GetRequiredService<IOptions<CloudinarySetting>>().Value;
 
-    Account cloudinaryAccount = new Account(
+    Account cloudinaryAccount = new(
         cloudinarySettings.CloudName,
         cloudinarySettings.APIKey,
         cloudinarySettings.APISecret);

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Serilog;
+﻿using Microsoft.AspNetCore.Mvc;
 using TicketEase.Application.DTO;
 using TicketEase.Application.DTO.Manager;
 using TicketEase.Application.Interfaces.Services;
@@ -14,9 +12,12 @@ namespace TicketEase.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerServices _managerService;
+        
+
         public ManagerController(IManagerServices managerService)
         {
             _managerService = managerService;
+            
         }
 
         [HttpPost("AddManager")]
@@ -54,10 +55,9 @@ namespace TicketEase.Controllers
                 return Ok(response);            
         }
 
-        [HttpPut("updateProfile/{managerId}")]
-        public async Task<IActionResult> UpdateManagerProfile(string managerId, [FromBody] UpdateManagerDto updateManagerDto)
-        {           
-
+        [HttpPut("updateManager/{managerId}")]
+        public async Task<IActionResult> UpdateManagerProfile(string managerId, [FromForm] UpdateManagerDto updateManagerDto)
+        {
             var result = await _managerService.UpdateManagerProfileAsync(managerId, updateManagerDto);
             return Ok(new ApiResponse<bool>(true, "User updated successfully.", 200, true, null));              
 

@@ -18,13 +18,17 @@ namespace TicketEase.Application.ServicesImplementation
 
         public async Task SendHtmlEmailAsync(MailRequest mailRequest)
         {
-            var message = new MimeMessage();
-            message.Sender = MailboxAddress.Parse(emailSettings.Email);
+            var message = new MimeMessage
+            {
+                Sender = MailboxAddress.Parse(emailSettings.Email)
+            };
             message.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             message.Subject = mailRequest.Subject;
 
-            var builder = new BodyBuilder();
-            builder.HtmlBody = mailRequest.Body;
+            var builder = new BodyBuilder
+            {
+                HtmlBody = mailRequest.Body
+            };
 
             byte[] fileBytes1;
             byte[] fileBytes2;

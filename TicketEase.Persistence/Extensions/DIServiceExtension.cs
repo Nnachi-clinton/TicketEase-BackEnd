@@ -22,7 +22,8 @@ namespace TicketEase.Persistence.Extensions
 			config.GetSection("EmailSettings").Bind(emailSettings);
 			services.AddSingleton(emailSettings);
 			services.AddScoped<IUserRepository, UserRepository>();
-			services.AddTransient<ICloudinaryServices, CloudinaryServices>();
+			services.AddScoped(typeof(ICloudinaryServices<>), typeof(CloudinaryServices<>));
+			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<IProjectServices, ProjectServices>();
 			services.AddScoped<IBoardServices, BoardServices>();
@@ -33,8 +34,7 @@ namespace TicketEase.Persistence.Extensions
 			services.AddScoped<IManagerServices, ManagerServices>();
 			services.AddScoped<IUserServices, UserServices>();
 			services.AddScoped<IAuthenticationService, AuthenticationService>();
-			services.AddScoped<IEmailServices, EmailServices>();
-			
+			services.AddScoped<IEmailServices, EmailServices>();			
 			services.AddDbContext<TicketEaseDbContext>(options =>
 			options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 		}

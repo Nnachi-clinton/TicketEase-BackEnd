@@ -15,14 +15,12 @@
 			Data = data;
 			Errors = errors;
 		}
-
 		public ApiResponse(bool isSucceeded, int statusCode, string message)
 		{
 			Succeeded = isSucceeded;
 			Message = message;
 			StatusCode = statusCode;
 		}
-
 		public ApiResponse(T data, string message = null)
 		{
 			Succeeded = true;

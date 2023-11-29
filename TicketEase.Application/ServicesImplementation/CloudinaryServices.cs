@@ -1,37 +1,27 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Application.Interfaces.Services;
-using TicketEase.Domain.Entities;
 
 namespace TicketEase.Application.ServicesImplementation
 {
-    public class CloudinaryServices :  ICloudinaryServices
+    public class CloudinaryServices<TEntity> : ICloudinaryServices<TEntity> where TEntity : class
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<TEntity> _repository;
 
-        public CloudinaryServices(IUnitOfWork unitOfWork)
+        public CloudinaryServices(IGenericRepository<TEntity> repository)
         {
-            _unitOfWork = unitOfWork;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<AppUser?> GetByIdAsync(string id)
+        public async Task<string> UploadImage(string entityId, IFormFile file)
         {
-            return  _unitOfWork.UserRepository.GetUserById(id);
-        }
+            var entity = _repository.GetById(entityId);
 
-
-
-
-        public async Task<string> UploadContactImage(string Id, IFormFile file)
-        {
-            var user = await GetByIdAsync(Id);
-
-            if (user == null)
+            if (entity == null)
             {
-                return "User not found";
+                return $"{typeof(TEntity).Name} not found";
             }
 
             var cloudinary = new Cloudinary(new Account(
@@ -47,18 +37,20 @@ namespace TicketEase.Application.ServicesImplementation
 
             var uploadResult = await cloudinary.UploadAsync(upload);
 
-            // Update the user's ImageUrl property
+            // Update the entity's ImageUrl property
+            // Note: Adjust the property name based on your entity structure
+            // For example, if your entity has a property named ImageUrl, use entity.ImageUrl
+            // If it's something else, adjust accordingly.
+            // entity.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
-            user.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
-
-            // Save the updated user entity to the database
-            _unitOfWork.UserRepository.Update(user);
+            // Save the updated entity to the database
+            _repository.Update(entity);
 
             try
             {
-                _unitOfWork.SaveChanges();
-               return user.ImageUrl;
-                //return "success";
+                _repository.SaveChanges();
+                // Return the updated property value
+                return uploadResult.SecureUrl.AbsoluteUri;
             }
             catch (Exception ex)
             {
@@ -66,7 +58,5 @@ namespace TicketEase.Application.ServicesImplementation
                 return "Database update error occurred";
             }
         }
-
-
     }
 }
