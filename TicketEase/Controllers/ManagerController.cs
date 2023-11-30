@@ -63,5 +63,22 @@ namespace TicketEase.Controllers
 
            
         }
+
+        [HttpGet("GetManagerDetails/{managerId}")]
+        public async Task<IActionResult> GetManagerDetails(string managerId)
+        {
+            var boards = await _managerService.GetBoardsByManagerId(managerId);
+            var projects = await _managerService.GetProjectsFromBoards(boards);
+            var tickets = await _managerService.GetTicketsFromProjects(projects);
+
+            var managerDetails = new
+            {
+                Boards = boards.Count,
+                Projects = projects.Count,
+                Tickets = tickets.Count
+            };
+
+            return Ok(managerDetails);
+        }
     }
 }

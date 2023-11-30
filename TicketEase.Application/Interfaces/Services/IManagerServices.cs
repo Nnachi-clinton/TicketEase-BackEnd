@@ -17,5 +17,8 @@ namespace TicketEase.Application.Interfaces.Services
         Task<ApiResponse<PageResult<IEnumerable<Manager>>>> GetAllManagerByPagination(int page, int perPage);
         Task<ApiResponse<bool>> SendManagerInformationToAdminAsync(ManagerInfoCreateDto managerDto);
         Task<ApiResponse<bool>> UpdateManagerProfileAsync(string managerId, UpdateManagerDto updateManagerDto);
+        Task<List<Board>> GetBoardsByManagerId(string managerId);
+        Task<List<Project>> GetProjectsFromBoards(List<Board> boards);
+        Task<List<Ticket>> GetTicketsFromProjects(List<Project> projects);
     }
 }
