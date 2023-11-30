@@ -16,6 +16,7 @@ namespace TicketEase.Application.DTO
         public string State { get; set; }
 
         public string Gender { get; set; }
+        public string PhoneNumber { get; set; }
 
         public string CloudinaryPublicId { get; set; }
 
