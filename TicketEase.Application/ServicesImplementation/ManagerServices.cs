@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using TicketEase.Application.DTO;
 using TicketEase.Application.DTO.Manager;
+using TicketEase.Application.DTO.Project;
 using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Application.Interfaces.Services;
 using TicketEase.Common.Utilities;
@@ -173,35 +174,30 @@ namespace TicketEase.Application.ServicesImplementation
 			}
 		}
 
-		public async Task<ApiResponse<bool>> UpdateManagerProfileAsync(string managerId, UpdateManagerDto updateManagerDto)
-		{
-			try
-			{
-				var manager = _unitOfWork.ManagerRepository.GetManagerById(managerId);
+        public async Task<ApiResponse<bool>> UpdateManagerProfileAsync(string managerId, UpdateManagerDto updateManagerDto)
+        {
+            try
+            {
+                var manager = _unitOfWork.ManagerRepository.GetManagerById(managerId);
 
-				if (manager == null)
-				{
-					return ApiResponse<bool>.Failed(false, "Manager not found.", StatusCodes.Status404NotFound, new List<string> { "Manager not found." });
-				}
+                if (manager == null)
+                {
+                    return ApiResponse<bool>.Failed(false, "Manager not found.", StatusCodes.Status404NotFound, new List<string> { "Manager not found." });
+                }
 
-				var file = updateManagerDto.File;
+                var file = updateManagerDto.File;
 
-				if (file != null)
-				{
-					// Upload the image to Cloudinary and get the URL
-					var imageUrl = await _cloudinaryServices.UploadImage(managerId, file);
+                if (file != null)
+                {
+                    var photoUpdateResult = await UpdateManagerPhotoAsync(managerId, new UpdatePhotoDTO { PhotoFile = file });
 
-					if (imageUrl == null)
-					{
-						Log.Warning($"Failed to upload image for user with ID {managerId}. " + imageUrl);
-						return ApiResponse<bool>.Failed(false, $"Failed to upload image for manager with ID {managerId}.", StatusCodes.Status500InternalServerError, new List<string> { "Failed to upload image." });
-					}
+                    if (!photoUpdateResult.Succeeded)
+                    {
+                        return ApiResponse<bool>.Failed(false, photoUpdateResult.Message, photoUpdateResult.StatusCode, photoUpdateResult.Errors);
+                    }
+                }
 
-					// Update the ImgUrl property with the Cloudinary URL
-					manager.ImgUrl = imageUrl;
-				}
-
-				
+				// Update other properties
 				//manager.UpdatedDate = DateTime.UtcNow;
 				manager.BusinessEmail = updateManagerDto.BusinessEmail;
 				manager.State = updateManagerDto.State;
@@ -209,21 +205,57 @@ namespace TicketEase.Application.ServicesImplementation
 				manager.CompanyAddress = updateManagerDto.CompanyAddress;
 				manager.CompanyName = updateManagerDto.CompanyName;
 
-				// Update the manager entity in the repository
-				_unitOfWork.ManagerRepository.UpdateManager(manager);
+                // Update the manager entity in the repository
+                _unitOfWork.ManagerRepository.UpdateManager(manager);
 
-				// Save changes to the database
-				_unitOfWork.SaveChanges();
+                // Save changes to the database
+                _unitOfWork.SaveChanges();
 
-				return ApiResponse<bool>.Success(true, "Manager updated successfully.", StatusCodes.Status200OK);
-			}
-			catch (Exception ex)
-			{
-				return ApiResponse<bool>.Failed(false, "Some error occurred.", StatusCodes.Status500InternalServerError, new List<string> { ex.Message });
-			}
-		}
+                return ApiResponse<bool>.Success(true, "Manager updated successfully.", StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.Failed(false, "Some error occurred.", StatusCodes.Status500InternalServerError, new List<string> { ex.Message });
+            }
+        }
 
-		public async Task<ApiResponse<bool>> SendManagerInformationToAdminAsync(ManagerInfoCreateDto managerInfoCreateDto)
+        public async Task<ApiResponse<string>> UpdateManagerPhotoAsync(string managerId, UpdatePhotoDTO model)
+        {
+            if (model == null || model.PhotoFile == null || model.PhotoFile.Length <= 0)
+            {
+                Log.Warning($"Invalid file size for manager with ID {managerId}.");
+                return ApiResponse<string>.Failed(false, $"Invalid file size for manager with ID {managerId}.", StatusCodes.Status400BadRequest, new List<string> { $"Invalid file size for manager with ID {managerId}." });
+            }
+
+            var manager = _unitOfWork.ManagerRepository.GetManagerById(managerId);
+
+            if (manager == null)
+            {
+                Log.Warning($"Manager with ID {managerId} not found.");
+                return ApiResponse<string>.Failed(false, $"Manager with ID {managerId} not found.", StatusCodes.Status404NotFound, new List<string> { $"Manager with ID {managerId} not found." });
+            }
+
+            // Upload the image to Cloudinary and get the URL
+            var imageUrl = await _cloudinaryServices.UploadImage(managerId, model.PhotoFile);
+
+            if (imageUrl == null)
+            {
+                Log.Warning($"Failed to upload image for manager with ID {managerId}.");
+                return ApiResponse<string>.Failed(false, $"Failed to upload image for manager with ID {managerId}.", StatusCodes.Status500InternalServerError, new List<string> { "Failed to upload image." });
+            }
+
+            // Update the ImgUrl property with the Cloudinary URL
+            manager.ImgUrl = imageUrl;
+
+            // Update the manager entity in the repository
+            _unitOfWork.ManagerRepository.UpdateManager(manager);
+
+            _unitOfWork.SaveChanges();
+
+            return ApiResponse<string>.Success(imageUrl, "Manager photo updated successfully.", StatusCodes.Status200OK);
+        }
+
+        public async Task<ApiResponse<bool>> SendManagerInformationToAdminAsync(ManagerInfoCreateDto managerInfoCreateDto)
 		{
 			try
 			{
