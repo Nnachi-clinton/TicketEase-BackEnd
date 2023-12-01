@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketEase.Persistence.Context;
+using TicketEase.Persistence.Migrations;
 
 #nullable disable
 
@@ -227,7 +228,7 @@ namespace TicketEase.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("ResetTokenExpires")
+                    b.Property<DateTime>("ResetTokenExpires")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
@@ -249,7 +250,7 @@ namespace TicketEase.Persistence.Migrations
                     b.Property<string>("VerificationToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("VerifiedAt")
+                    b.Property<DateTime>("VerifiedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -298,7 +299,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Boards");
+                    b.ToTable("Boards", (string)null);
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Comment", b =>
@@ -334,7 +335,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Manager", b =>
@@ -372,7 +373,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Managers");
+                    b.ToTable("Managers", (string)null);
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Payment", b =>
@@ -407,7 +408,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Project", b =>
@@ -443,7 +444,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("TicketEase.Domain.Entities.Ticket", b =>
@@ -497,7 +498,7 @@ namespace TicketEase.Persistence.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

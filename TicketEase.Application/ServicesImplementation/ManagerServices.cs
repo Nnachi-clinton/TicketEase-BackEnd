@@ -201,8 +201,8 @@ namespace TicketEase.Application.ServicesImplementation
 					manager.ImgUrl = imageUrl;
 				}
 
-				// Update other properties
-				manager.UpdatedDate = DateTime.UtcNow;
+				
+				//manager.UpdatedDate = DateTime.UtcNow;
 				manager.BusinessEmail = updateManagerDto.BusinessEmail;
 				manager.State = updateManagerDto.State;
 				manager.BusinessPhone = updateManagerDto.BusinessPhone;
@@ -286,37 +286,6 @@ namespace TicketEase.Application.ServicesImplementation
         public async Task<List<Board>> GetBoardsByManagerId(string managerId)
         {
             return _unitOfWork.BoardRepository.FindBoard(x => x.ManagerId == managerId);
-        }
-
-
-        public async Task<List<Project>> GetProjectsFromBoards(List<Board> boards)
-        {
-            List<Project> projectList = new List<Project>();
-
-            foreach (var board in boards)
-            {
-                var listofProjects = _unitOfWork.ProjectRepository.FindProject(x => x.BoardId == board.Id);
-                foreach (var project in listofProjects)
-                {
-                    projectList.Add(project);
-                }
-
-            }
-            return projectList;
-        }
-
-        public async Task<List<Ticket>> GetTicketsFromProjects(List<Project> projects)
-        {
-            List<Ticket> ticketList = new List<Ticket>();
-            foreach (var project in projects)
-            {
-                var listOfTickets = _unitOfWork.TicketRepository.FindTicket(x => x.ProjectId == project.Id);
-                foreach (var ticket in listOfTickets)
-                {
-                    ticketList.Add(ticket);
-                }
-            }
-            return ticketList;
         }
 
 

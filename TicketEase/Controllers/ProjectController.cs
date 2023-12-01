@@ -60,7 +60,7 @@ namespace TicketEase.Controllers
 				}
 				else
 				{
-					return StatusCode(result.StatusCode, new { Message = result.Message, Errors = result.Errors});
+					return StatusCode(result.StatusCode, new { result.Message, result.Errors});
 				}
 			}
 			catch (Exception ex)

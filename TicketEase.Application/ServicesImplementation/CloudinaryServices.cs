@@ -37,12 +37,7 @@ namespace TicketEase.Application.ServicesImplementation
 
             var uploadResult = await cloudinary.UploadAsync(upload);
 
-            // Update the entity's ImageUrl property
-            // Note: Adjust the property name based on your entity structure
-            // For example, if your entity has a property named ImageUrl, use entity.ImageUrl
-            // If it's something else, adjust accordingly.
-            // entity.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
-
+            
             // Save the updated entity to the database
             _repository.Update(entity);
 

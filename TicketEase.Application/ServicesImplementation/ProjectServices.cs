@@ -234,5 +234,33 @@ namespace TicketEase.Application.ServicesImplementation
 				return Task.FromResult(new ApiResponse<ProjectReponseDto>(false, 500, $"An error occured during this process."));
 			}
 		}
-	}
+        public async Task<List<Project>> GetProjectsFromBoards(List<Board> boards)
+        {
+            List<Project> projectList = new();
+
+            foreach (var board in boards)
+            {
+                var listofProjects = _unitOfWork.ProjectRepository.FindProject(x => x.BoardId == board.Id);
+                foreach (var project in listofProjects)
+                {
+                    projectList.Add(project);
+                }
+
+            }
+            return projectList;
+        }
+        public async Task<List<Ticket>> GetTicketsFromProjects(List<Project> projects)
+        {
+            List<Ticket> ticketList = new();
+            foreach (var project in projects)
+            {
+                var listOfTickets = _unitOfWork.TicketRepository.FindTicket(x => x.ProjectId == project.Id);
+                foreach (var ticket in listOfTickets)
+                {
+                    ticketList.Add(ticket);
+                }
+            }
+            return ticketList;
+        }
+    }
 }

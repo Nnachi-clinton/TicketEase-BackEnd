@@ -12,12 +12,12 @@ namespace TicketEase.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerServices _managerService;
-        
+        private readonly IProjectServices _projectService;
 
-        public ManagerController(IManagerServices managerService)
+        public ManagerController(IManagerServices managerService, IProjectServices projectService)
         {
             _managerService = managerService;
-            
+            _projectService = projectService;
         }
 
         [HttpPost("AddManager")]
@@ -68,8 +68,8 @@ namespace TicketEase.Controllers
         public async Task<IActionResult> GetManagerDetails(string managerId)
         {
             var boards = await _managerService.GetBoardsByManagerId(managerId);
-            var projects = await _managerService.GetProjectsFromBoards(boards);
-            var tickets = await _managerService.GetTicketsFromProjects(projects);
+            var projects = await _projectService.GetProjectsFromBoards(boards);
+            var tickets = await _projectService.GetTicketsFromProjects(projects);
 
             var managerDetails = new
             {
