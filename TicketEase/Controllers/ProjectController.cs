@@ -48,7 +48,7 @@ namespace TicketEase.Controllers
 		}
 
 		[HttpGet("Get_All_Projects_Paginated")]
-		public async Task<IActionResult> GetAllProjects([FromQuery] int page = 1, [FromQuery] int perPage = 5)
+		public async Task<IActionResult> GetAllProjects([FromQuery] int page, [FromQuery] int perPage)
 		{
 			try
 			{
