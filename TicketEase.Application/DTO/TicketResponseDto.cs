@@ -6,6 +6,7 @@ namespace TicketEase.Application.DTO
     public class TicketResponseDto
     {
         public string Id { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string TicketReference { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
