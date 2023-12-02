@@ -182,9 +182,17 @@ namespace TicketEase.Application.ServicesImplementation
 		{
 			try
 			{
-				var projects = _unitOfWork.ProjectRepository.GetAll();
+                var board = _unitOfWork.BoardRepository.GetById(boardId);
+
+                if (board == null)
+                {
+                    
+                    return ApiResponse<PageResult<IEnumerable<Project>>>.Failed(false, "Board not found", 404, new List<string> {});
+                }
+                var projects = _unitOfWork.ProjectRepository.GetAll();
 
 				var boardProjects = projects.Where(project => project.BoardId == boardId).ToList();
+
 				var paginationResponse = await Pagination<Project>.GetPager(boardProjects, perPage, page, p => p.Title, p => p.Id);
 
 				return ApiResponse<PageResult<IEnumerable<Project>>>.Success(paginationResponse, "Successfully retrieved Projects", 200 );
