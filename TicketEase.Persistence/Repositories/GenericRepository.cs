@@ -1,4 +1,6 @@
-﻿using TicketEase.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using TicketEase.Application.Interfaces.Repositories;
 using TicketEase.Persistence.Context;
 
 namespace TicketEase.Persistence.Repositories
@@ -25,5 +27,7 @@ namespace TicketEase.Persistence.Repositories
 
 		public void Update(T entity)=>_ticketEaseDbContext.Set<T>().Update(entity);
         public void SaveChanges() => _ticketEaseDbContext.SaveChanges();
+        public bool Exists(Expression<Func<T, bool>> predicate) =>  _ticketEaseDbContext.Set<T>().Any(predicate);
+        
     }
 }

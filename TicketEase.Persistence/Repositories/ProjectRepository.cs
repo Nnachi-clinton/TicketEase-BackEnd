@@ -36,6 +36,11 @@ namespace TicketEase.Persistence.Repositories
         {
             DeleteAll(projects);
         }
+
+        public bool Exists(Expression<Func<Project, bool>> predicate)
+        {
+            return _ticketEaseDbContext.Set<Project>().Any(predicate);
+        }
     }
 }
 	

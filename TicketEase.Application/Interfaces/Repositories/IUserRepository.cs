@@ -12,5 +12,5 @@ namespace TicketEase.Application.Interfaces.Repositories
 		public List<AppUser> FindUser(Expression<Func<AppUser, bool>> condition);
 		AppUser GetUserById(string id);
 		void UpdateUser(AppUser appUser);
-	}
+    }
 }

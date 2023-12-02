@@ -11,8 +11,8 @@ using TicketEase.Domain.Enums;
 
 namespace TicketEase.Application.ServicesImplementation
 {
-	public class TicketService : ITicketService
-	{
+    public class TicketService : ITicketService
+    {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<TicketService> _logger;
@@ -24,15 +24,56 @@ namespace TicketEase.Application.ServicesImplementation
             _logger = logger;
         }
 
-        public ApiResponse<TicketResponseDto> AddTicket(string userId, string ProjectId, TicketRequestDto ticketDTO)
+        public ApiResponse<TicketResponseDto> AddTicket(string userId, string projectId, TicketRequestDto ticketDTO)
         {
             ApiResponse<TicketResponseDto> response;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                response = ApiResponse<TicketResponseDto>.Failed(new List<string> { "User ID is required." });
+                return response;
+            }
+
+            if (string.IsNullOrEmpty(projectId))
+            {
+                response = ApiResponse<TicketResponseDto>.Failed(new List<string> { "Project ID is required." });
+                return response;
+            }
+
             try
             {
+                var userExists = _unitOfWork.UserRepository.Exists(u => u.Id == userId);
+                if (!userExists)
+                {
+                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"User with ID {userId} not found." });
+                    return response;
+                }
+
+                var projectExists = _unitOfWork.ProjectRepository.Exists(p => p.Id == projectId);
+                if (!projectExists)
+                {
+                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"Project with ID {projectId} not found." });
+                    return response;
+                }
+
+                var existingTicket = _unitOfWork.TicketRepository.Find(t =>
+                    t.Title == ticketDTO.Title
+                    && t.Description == ticketDTO.Description
+                    && t.AssignedTo == ticketDTO.AssignedTo);
+
+                if (existingTicket != null)
+                {
+                    response = ApiResponse<TicketResponseDto>.Failed(new List<string>
+                    {
+                        $"The title or description has already been assigned to {ticketDTO.AssignedTo}."
+                    });
+                    return response;
+                }
+
                 var ticketEntity = _mapper.Map<Ticket>(ticketDTO);
                 ticketEntity.TicketReference = TicketHelper.GenerateTicketReference();
                 ticketEntity.AppUserId = userId;
-                ticketEntity.ProjectId = ProjectId;
+                ticketEntity.ProjectId = projectId;
 
                 _unitOfWork.TicketRepository.AddTicket(ticketEntity);
                 _unitOfWork.SaveChanges();
@@ -47,6 +88,8 @@ namespace TicketEase.Application.ServicesImplementation
                 return ApiResponse<TicketResponseDto>.Failed(new List<string> { "Error: " + ex.Message });
             }
         }
+
+
 
         public ApiResponse<TicketResponseDto> EditTicket(string ticketId, UpdateTicketRequestDto updatedTicketDTO)
         {
@@ -77,40 +120,40 @@ namespace TicketEase.Application.ServicesImplementation
             }
         }
         public async Task<ApiResponse<PageResult<IEnumerable<Ticket>>>> GetTicketByProjectId(string projectId, int page, int perPage)
-		{
-			var tickets = await _unitOfWork.TicketRepository.GetTicketByProjectId(ticket => ticket.ProjectId == projectId);
-			var pagedTickets = await Pagination<Ticket>.GetPager(
-			tickets,
-			perPage,
-			page,
-			ticket => ticket.Title,
-			ticket => ticket.Id.ToString());
+        {
+            var tickets = await _unitOfWork.TicketRepository.GetTicketByProjectId(ticket => ticket.ProjectId == projectId);
+            var pagedTickets = await Pagination<Ticket>.GetPager(
+            tickets,
+            perPage,
+            page,
+            ticket => ticket.Title,
+            ticket => ticket.Id.ToString());
 
 
-			//return pagedTickets;
-			return new ApiResponse<PageResult<IEnumerable<Ticket>>>(true, "Operation succesful", StatusCodes.Status200OK, pagedTickets, new List<string>());
-		}
+            //return pagedTickets;
+            return new ApiResponse<PageResult<IEnumerable<Ticket>>>(true, "Operation succesful", StatusCodes.Status200OK, pagedTickets, new List<string>());
+        }
 
-		public async Task<ApiResponse<PageResult<IEnumerable<Ticket>>>> GetTicketByUserId(string userId, int page, int perPage)
-		{
-			var tickets = await _unitOfWork.TicketRepository.GetTicketByUserId(ticket => ticket.AppUserId == userId);
+        public async Task<ApiResponse<PageResult<IEnumerable<Ticket>>>> GetTicketByUserId(string userId, int page, int perPage)
+        {
+            var tickets = await _unitOfWork.TicketRepository.GetTicketByUserId(ticket => ticket.AppUserId == userId);
 
-			// Use the Paginatioo paginate the dat
-			var pagedTickets = await Pagination<Ticket>.GetPager(
-				tickets,
-				perPage,
-				page,
-				ticket => ticket.Title,
-				ticket => ticket.Id.ToString());
+            // Use the Paginatioo paginate the dat
+            var pagedTickets = await Pagination<Ticket>.GetPager(
+                tickets,
+                perPage,
+                page,
+                ticket => ticket.Title,
+                ticket => ticket.Id.ToString());
 
-			return new ApiResponse<PageResult<IEnumerable<Ticket>>> (true, "Operation succesful", 200, pagedTickets, new List<string>());
-			//{
-			//	Status = "Success",
-			//	Data = pagedTickets
-			//};
+            return new ApiResponse<PageResult<IEnumerable<Ticket>>>(true, "Operation succesful", 200, pagedTickets, new List<string>());
+            //{
+            //	Status = "Success",
+            //	Data = pagedTickets
+            //};
 
-			//return pagedTickets;
-		}
+            //return pagedTickets;
+        }
 
         public async Task<ApiResponse<bool>> DeleteTicketByIdAsync(string ticketId)
         {

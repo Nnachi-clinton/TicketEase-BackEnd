@@ -38,5 +38,8 @@ namespace TicketEase.Persistence.Repositories
 		}
 
 		public void UpdateUser(AppUser appUser) => Update(appUser);
-	}
+
+
+        public bool Exists(Expression<Func<AppUser, bool>> predicate)=> _ticketEaseDbContext.Set<AppUser>().Any(predicate);
+    }
 }
