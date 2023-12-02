@@ -72,14 +72,8 @@ namespace TicketEase.Application.ServicesImplementation
 			{
 				try
 				{
-					var email = new MailRequest()
-					{
-						Subject = "Welcome to TicketEase",
-						ToEmail = managerCreateDto.BusinessEmail,
-						Body = emailBody
-					};
-					var managerResponse = _mapper.Map<ManagerResponseDto>(manager);
-					await _emailServices.SendHtmlEmailAsync(email);
+					await SendManagerInformationToAdminAsync(managerCreateDto);                   
+					var managerResponse = _mapper.Map<ManagerResponseDto>(manager);				
 					return new ApiResponse<ManagerResponseDto>(true, response.Message, StatusCodes.Status200OK, managerResponse, new List<string>());
 				}
 				catch (Exception ex)
@@ -268,7 +262,8 @@ namespace TicketEase.Application.ServicesImplementation
 						   $"Company Name: {managerInfoCreateDto.CompanyName}\n" +
 						   $"Reason to Onboard: {managerInfoCreateDto.CompanyDescription}"
 				};
-				return ApiResponse<bool>.Success(true, "Manager information sent to admin successfully", 200);
+                await _emailServices.SendHtmlEmailAsync(mailRequest);
+                return ApiResponse<bool>.Success(true, "Manager information sent to admin successfully", 200);
 			}
 			catch (Exception ex)
 			{
