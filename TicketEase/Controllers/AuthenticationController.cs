@@ -130,14 +130,14 @@ namespace TicketEase.Controllers
 
             var userId = userIdResponse.Data;
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(userId);
 
             if (user == null)
             {
                 return Unauthorized(new ApiResponse<string>(false, "User not found.", 401, null, new List<string>()));
             }
 
-			var response = await _authenticationService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            var response = await _authenticationService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
             if (response.Succeeded)
             {

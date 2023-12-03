@@ -38,6 +38,7 @@ namespace TicketEase.Application.ServicesImplementation
 			_logger = logger;
 			_config = config;
 		}
+
 		public async Task<ApiResponse<string>> RegisterAsync(AppUserCreateDto appUserCreateDto)
 		{
 			var user = await _userManager.FindByEmailAsync(appUserCreateDto.Email);
@@ -181,7 +182,9 @@ namespace TicketEase.Application.ServicesImplementation
 			};
 
 			var token = new JwtSecurityToken(
-				issuer: null,
+                //issuer: _config.GetValue<string>("JwtSettings:ValidIssuer"),
+                //audience: _config.GetValue<string>("JwtSettings:ValidAudience"),
+                issuer: null,
 				audience: null,
 				claims: claims,
 				expires: DateTime.UtcNow.AddMinutes(int.Parse(_config.GetSection("JwtSettings:AccessTokenExpiration").Value)),
@@ -263,7 +266,70 @@ namespace TicketEase.Application.ServicesImplementation
 			}
 		}
 
-		public async Task<ApiResponse<string>> ChangePasswordAsync(AppUser user, string currentPassword, string newPassword)
+        public async Task<ApiResponse<string>> ValidateTokenAsync(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_config.GetSection("JwtSettings:Secret").Value);
+
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = null,
+                    ValidAudience = null,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+
+                SecurityToken securityToken;
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
+
+                var emailClaim = principal.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+
+                return new ApiResponse<string>(true, "Token is valid.", 200, null, new List<string>());
+            }
+            catch (SecurityTokenException ex)
+            {
+                _logger.LogError(ex, "Token validation failed");
+                var errorList = new List<string> { ex.Message };
+                return new ApiResponse<string>(false, "Token validation failed.", 400, null, errorList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during token validation");
+                var errorList = new List<string> { ex.Message };
+                return new ApiResponse<string>(false, "Error occurred during token validation", 500, null, errorList);
+            }
+        }
+
+        public ApiResponse<string> ExtractUserIdFromToken(string authToken)
+        {
+            try
+            {
+                var token = authToken.Replace("Bearer ", "");
+
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+                var userId = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return new ApiResponse<string>(false, "Invalid or expired token.", 401, null, new List<string>());
+                }
+
+                return new ApiResponse<string>(true, "User ID extracted successfully.", 200, userId, new List<string>());
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<string>(false, "Error extracting user ID from token.", 500, null, new List<string> { ex.Message });
+            }
+        }
+
+        public async Task<ApiResponse<string>> ChangePasswordAsync(AppUser user, string currentPassword, string newPassword)
 		{
 			try
 			{
@@ -283,69 +349,6 @@ namespace TicketEase.Application.ServicesImplementation
 				_logger.LogError(ex, "Error occurred while changing password");
 				var errorList = new List<string> { ex.Message };
 				return new ApiResponse<string>(true, "Error occurred while changing password", 500, null, errorList);
-			}
-		}
-
-		public async Task<ApiResponse<string>> ValidateTokenAsync(string token)
-		{
-			try
-			{
-				var tokenHandler = new JwtSecurityTokenHandler();
-				var key = Encoding.UTF8.GetBytes(_config.GetSection("JwtSettings:Secret").Value);
-
-				var validationParameters = new TokenValidationParameters
-				{
-					ValidateIssuer = true,
-					ValidateAudience = true,
-					ValidateLifetime = true,
-					ValidateIssuerSigningKey = true,
-					ValidIssuer = _config.GetSection("JwtSettings:ValidIssuer").Value,
-					ValidAudience = _config.GetSection("JwtSettings:ValidAudience").Value,
-					IssuerSigningKey = new SymmetricSecurityKey(key)
-				};
-
-				SecurityToken securityToken;
-				var principal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
-
-				var emailClaim = principal.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
-
-				return new ApiResponse<string>(true, "Token is valid.", 200, null, new List<string>());
-			}
-			catch (SecurityTokenException ex)
-			{
-				_logger.LogError(ex, "Token validation failed");
-				var errorList = new List<string> { ex.Message };
-				return new ApiResponse<string>(false, "Token validation failed.", 400, null, errorList);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Error occurred during token validation");
-				var errorList = new List<string> { ex.Message };
-				return new ApiResponse<string>(false, "Error occurred during token validation", 500, null, errorList);
-			}
-		}
-
-		public ApiResponse<string> ExtractUserIdFromToken(string authToken)
-		{
-			try
-			{
-				var token = authToken.Replace("Bearer ", "");
-
-				var handler = new JwtSecurityTokenHandler();
-				var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
-
-				var userId = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value;
-
-				if (string.IsNullOrWhiteSpace(userId))
-				{
-					return new ApiResponse<string>(false, "Invalid or expired token.", 401, null, new List<string>());
-				}
-
-				return new ApiResponse<string>(true, "User ID extracted successfully.", 200, userId, new List<string>());
-			}
-			catch (Exception ex)
-			{
-				return new ApiResponse<string>(false, "Error extracting user ID from token.", 500, null, new List<string> { ex.Message });
 			}
 		}
 	}
