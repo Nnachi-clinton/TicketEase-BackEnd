@@ -45,28 +45,14 @@ namespace TicketEase.Application.ServicesImplementation
                 var userExists = _unitOfWork.UserRepository.Exists(u => u.Id == userId);
                 if (!userExists)
                 {
-                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"User with ID {userId} not found." });
+                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"User with ID {userId} does not exist." });
                     return response;
                 }
 
                 var projectExists = _unitOfWork.ProjectRepository.Exists(p => p.Id == projectId);
                 if (!projectExists)
                 {
-                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"Project with ID {projectId} not found." });
-                    return response;
-                }
-
-                var existingTicket = _unitOfWork.TicketRepository.Find(t =>
-                    t.Title == ticketDTO.Title
-                    && t.Description == ticketDTO.Description
-                    && t.AssignedTo == ticketDTO.AssignedTo);
-
-                if (existingTicket != null)
-                {
-                    response = ApiResponse<TicketResponseDto>.Failed(new List<string>
-                    {
-                        $"The title or description has already been assigned to {ticketDTO.AssignedTo}."
-                    });
+                    response = ApiResponse<TicketResponseDto>.Failed(new List<string> { $"Project with ID {projectId} does not exist." });
                     return response;
                 }
 
@@ -88,6 +74,7 @@ namespace TicketEase.Application.ServicesImplementation
                 return ApiResponse<TicketResponseDto>.Failed(new List<string> { "Error: " + ex.Message });
             }
         }
+
 
 
 
