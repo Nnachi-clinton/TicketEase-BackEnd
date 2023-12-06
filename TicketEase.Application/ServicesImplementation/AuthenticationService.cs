@@ -177,7 +177,7 @@ namespace TicketEase.Application.ServicesImplementation
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, contact.UserName),
 				new Claim(JwtRegisteredClaimNames.Email, contact.Email),
-				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim(JwtRegisteredClaimNames.Jti, contact.Id),
 				new Claim(ClaimTypes.Role, roles)
 			};
 

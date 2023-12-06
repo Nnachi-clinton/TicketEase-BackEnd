@@ -69,7 +69,7 @@ namespace TicketEase.Application.ServicesImplementation
 		}
 		public List<ProjectReponseDto> GetAllProjects()
 		{
-			var projects = _unitOfWork.ProjectRepository.GetAll();
+			var projects = _unitOfWork.ProjectRepository.GetProjects();
 			List<ProjectReponseDto> list = new();
 
 			foreach (var project in projects)
