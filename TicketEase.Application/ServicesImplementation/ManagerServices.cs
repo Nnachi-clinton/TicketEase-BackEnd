@@ -72,8 +72,15 @@ namespace TicketEase.Application.ServicesImplementation
 			{
 				try
 				{
-					await SendManagerInformationToAdminAsync(managerCreateDto);                   
-					var managerResponse = _mapper.Map<ManagerResponseDto>(manager);				
+                    //await SendManagerInformationToAdminAsync(managerCreateDto);
+                    var mailRequest = new MailRequest
+					{
+						ToEmail = managerCreateDto.BusinessEmail,
+						Subject = "Manager Information",
+						Body = emailBody
+					};
+                    await _emailServices.SendHtmlEmailAsync(mailRequest);
+                    var managerResponse = _mapper.Map<ManagerResponseDto>(manager);				
 					return new ApiResponse<ManagerResponseDto>(true, response.Message, StatusCodes.Status200OK, managerResponse, new List<string>());
 				}
 				catch (Exception ex)
